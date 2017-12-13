@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain implements PIDOutput {
 
@@ -23,13 +24,13 @@ public class DriveTrain implements PIDOutput {
 
 	private DriveTrain() {
 		bigBird = new Module(Constants.DT_BB_DRIVE_TALON_ID,
-				Constants.DT_BB_TURN_TALON_ID, 4.20, 0.01, 0, 200, false);
+				Constants.DT_BB_TURN_TALON_ID, 4.20, 0.01, 0, 200);
 		bigHorse = new Module(Constants.DT_BH_DRIVE_TALON_ID,
-				Constants.DT_BH_TURN_TALON_ID, 4.20, 0.01, 0, 200, false); 
+				Constants.DT_BH_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
 		bigGiraffe = new Module(Constants.DT_BG_DRIVE_TALON_ID,
-				Constants.DT_BG_TURN_TALON_ID, 4.20, 0.01, 0, 200, true); 
+				Constants.DT_BG_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
 		bigSushi = new Module(Constants.DT_BS_DRIVE_TALON_ID,
-				Constants.DT_BS_TURN_TALON_ID, 4.20, 0.01, 0, 200, true); 
+				Constants.DT_BS_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
 																	
 		hyro = new AHRS(SerialPort.Port.kUSB);
 		//PID is for PID drive not for the modules
@@ -38,8 +39,8 @@ public class DriveTrain implements PIDOutput {
 		pidControllerRot.setInputRange(-180.0f, 180.0f);
 		pidControllerRot.setOutputRange(-1.0, 1.0);
 		pidControllerRot.setContinuous(true);
-		LiveWindow.addActuator("DriveSystem", "RotateController",
-				pidControllerRot);
+		LiveWindow.addActuator("DriveSystem", "RotateController", pidControllerRot);
+
 	}
 
 	public static AHRS getHyro() {

@@ -20,10 +20,8 @@ public class Module {
 	 * @param tIZone I might not need to know the I Zone value for the turning PID
 	 * @param reverseDrive True if you want to reverse the drive output
 	 */
-	public Module(int driveTalonID, int turnTalonID, double tP, double tI, double tD, int tIZone, boolean reverseDrive) {
+	public Module(int driveTalonID, int turnTalonID, double tP, double tI, double tD, int tIZone) {
 		drive = new CANTalon(driveTalonID);
-		drive.reverseOutput(reverseDrive); // dvv
-		drive.reverseSensor(reverseDrive); // dvv
 
 		turn = new CANTalon(turnTalonID);
 		turn.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -41,7 +39,7 @@ public class Module {
 	 * @param p value from -1 to 1
 	 */
 	public void setTurnPower(double p) {
-		this.turn.changeControlMode(TalonControlMode.PercentVbus);
+		this.turn.changeControlMode(TalonControlMode.PercentVbus); // 'Vbus' is short for 'Van V. Party Bus(woo woo!)'
 		this.turn.set(p);
 	}
 
