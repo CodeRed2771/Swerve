@@ -18,7 +18,6 @@ public class Module {
 	 * @param tI I probably need to know the I constant for the turning PID
 	 * @param tD I probably need to know the D constant for the turning PID
 	 * @param tIZone I might not need to know the I Zone value for the turning PID
-	 * @param reverseDrive True if you want to reverse the drive output
 	 */
 	public Module(int driveTalonID, int turnTalonID, double tP, double tI, double tD, int tIZone) {
 		drive = new CANTalon(driveTalonID);
@@ -90,13 +89,10 @@ public class Module {
 		return (int) (turn.getEncPosition() / FULL_ROTATION);
 	}
 	
-	
-	public double getTurnLocation() {
+	public double getTurnOrientation() {
 		return (turn.getEncPosition() % FULL_ROTATION) / FULL_ROTATION;
 	}
 	
-
-
 	public void setTurnPIDToSetPoint(double setpoint) {
 		turn.changeControlMode(TalonControlMode.Position);
 		turn.set(setpoint);
@@ -104,9 +100,9 @@ public class Module {
 	
 	/**
 	 * Set turn to pos from 0 to 1 using PID
-	 * @param setLoc location to set to
+	 * @param setLoc orientation to set to
 	 */	
-	public void setTurnLocation(double loc) {
+	public void setTurnOrientation(double loc) {
 		turn.changeControlMode(TalonControlMode.Position);
 		double base = getTurnRotations() * FULL_ROTATION;
 		if (getTurnEncPos() >= 0) {
@@ -140,7 +136,7 @@ public class Module {
 		setDrivePower(0);
 	}
 	
-	public void setBreakMode(boolean b) {
+	public void setBrakeMode(boolean b) {
 		drive.enableBrakeMode(b);
 	}
 	

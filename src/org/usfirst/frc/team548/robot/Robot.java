@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousPeriodic() {
-    	DriveTrain.setAllLocation(0);
+    	DriveTrain.setAllTurnOrientiation(0);
     }
     
     public void disabledInit() {
@@ -41,18 +41,19 @@ public class Robot extends IterativeRobot {
     	// DriveTrain.tankDrive(xbox.getLeftStickYAxis(), xbox.getRightStickYAxis());
     	//DriveTrain.humanDrive(xbox.getLeftStickYAxis(), xbox.getLeftStickXAxis(), Math.pow(xbox.getRightStickXAxis(), 3));
     	
-    	SmartDashboard.putBoolean("Big Bird Turn Encoder", DriveTrain.isBigBirdTurnEncConnected());
-    	SmartDashboard.putBoolean("Big Horse Turn Encoder", DriveTrain.isBigHorseTurnEncConnected());
-    	SmartDashboard.putBoolean("Big Giraffe Turn Encoder", DriveTrain.isBigGiraffeTurnEncConnected());
-    	SmartDashboard.putBoolean("Big Sushi Turn Encoder", DriveTrain.isBigSushiTurnEncConnected());
-    	SmartDashboard.putNumber("Hyro", DriveTrain.getHyroAngle());
+    	SmartDashboard.putBoolean("Mod A Turn Encoder", DriveTrain.isModuleATurnEncConnected());
+    	SmartDashboard.putBoolean("Mod B Turn Encoder", DriveTrain.isModuleBTurnEncConnected());
+    	SmartDashboard.putBoolean("Mod C Turn Encoder", DriveTrain.isModuleCTurnEncConnected());
+    	SmartDashboard.putBoolean("Mod D Turn Encoder", DriveTrain.isModuleDTurnEncConnected());
+    	SmartDashboard.putNumber("Hyro", DriveTrain.getgyroAngle());
     	SmartDashboard.putNumber("Avg. Error", DriveTrain.getAverageError());
+    	
     	xbox.setRightRumble(Math.pow(DriveTrain.getAverageError()/1300d, 2));
     	xbox.setLeftRumble((dt.isBrownedOut() ? 1 : 0));
     }
     
     public void testPeriodic() {
-    	LiveWindow.addSensor("DriveSystem", "Hyro", DriveTrain.getHyro());
+    	LiveWindow.addSensor("DriveSystem", "Hyro", DriveTrain.getgyro());
     }
     
     

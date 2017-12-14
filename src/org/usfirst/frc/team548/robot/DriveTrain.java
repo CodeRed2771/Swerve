@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveTrain implements PIDOutput {
 
 	private static DriveTrain instance;
-	private static Module bigBird, bigHorse, bigGiraffe, bigSushi;
-	private static AHRS hyro;
+	private static Module moduleA, moduleB, moduleC, moduleD;
+	private static AHRS gyro;
 	private static PIDController pidControllerRot;
 
 	public static DriveTrain getInstance() {
@@ -23,52 +23,54 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	private DriveTrain() {
-		bigBird = new Module(Constants.DT_BB_DRIVE_TALON_ID,
-				Constants.DT_BB_TURN_TALON_ID, 4.20, 0.01, 0, 200);
-		bigHorse = new Module(Constants.DT_BH_DRIVE_TALON_ID,
-				Constants.DT_BH_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
-		bigGiraffe = new Module(Constants.DT_BG_DRIVE_TALON_ID,
-				Constants.DT_BG_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
-		bigSushi = new Module(Constants.DT_BS_DRIVE_TALON_ID,
-				Constants.DT_BS_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleA = new Module(Constants.DT_A_DRIVE_TALON_ID,
+				Constants.DT_A_TURN_TALON_ID, 4.20, 0.01, 0, 200);
+		moduleB = new Module(Constants.DT_B_DRIVE_TALON_ID,
+				Constants.DT_B_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleC = new Module(Constants.DT_C_DRIVE_TALON_ID,
+				Constants.DT_C_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleD = new Module(Constants.DT_D_DRIVE_TALON_ID,
+				Constants.DT_D_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
 																	
-		hyro = new AHRS(SerialPort.Port.kUSB);
+		gyro = new AHRS(SerialPort.Port.kUSB);
+		
 		//PID is for PID drive not for the modules
 		pidControllerRot = new PIDController(Constants.DT_ROT_PID_P,
-				Constants.DT_ROT_PID_I, Constants.DT_ROT_PID_D, hyro, this);
+				Constants.DT_ROT_PID_I, Constants.DT_ROT_PID_D, gyro, this);
 		pidControllerRot.setInputRange(-180.0f, 180.0f);
 		pidControllerRot.setOutputRange(-1.0, 1.0);
 		pidControllerRot.setContinuous(true);
+		
 		LiveWindow.addActuator("DriveSystem", "RotateController", pidControllerRot);
 
 	}
 
-	public static AHRS getHyro() {
-		return hyro;
+	public static AHRS getgyro() {
+		return gyro;
 	}
 
 	public static void setDrivePower(double bbPower, double bhPower,
 			double bgPower, double bsPower) {
-		bigBird.setDrivePower(bbPower);
-		bigHorse.setDrivePower(bhPower);
-		bigGiraffe.setDrivePower(bgPower);
-		bigSushi.setDrivePower(bsPower);
+		moduleA.setDrivePower(bbPower);
+		moduleB.setDrivePower(bhPower);
+		moduleC.setDrivePower(bgPower);
+		moduleD.setDrivePower(bsPower);
 	}
 
 	public static void setTurnPower(double bbPower, double bhPower,
 			double bgPower, double bsPower) {
-		bigBird.setTurnPower(bbPower);
-		bigHorse.setTurnPower(bhPower);
-		bigGiraffe.setTurnPower(bgPower);
-		bigSushi.setTurnPower(bsPower);
+		moduleA.setTurnPower(bbPower);
+		moduleB.setTurnPower(bhPower);
+		moduleC.setTurnPower(bgPower);
+		moduleD.setTurnPower(bsPower);
 	}
 
-	public static void setLocation(double bbLoc, double bhLoc, double bgLoc,
+	public static void setTurnOrientation(double bbLoc, double bhLoc, double bgLoc,
 			double bsLoc) {
-		bigBird.setTurnLocation(bbLoc);
-		bigHorse.setTurnLocation(bhLoc);
-		bigGiraffe.setTurnLocation(bgLoc);
-		bigSushi.setTurnLocation(bsLoc);
+		moduleA.setTurnOrientation(bbLoc);
+		moduleB.setTurnOrientation(bhLoc);
+		moduleC.setTurnOrientation(bgLoc);
+		moduleD.setTurnOrientation(bsLoc);
 	}
 
 	public static void setAllTurnPower(double power) {
@@ -79,41 +81,40 @@ public class DriveTrain implements PIDOutput {
 		setDrivePower(power, power, power, power);
 	}
 
-	public static void setAllLocation(double loc) {
-		setLocation(loc, loc, loc, loc);
+	public static void setAllTurnOrientiation(double loc) {
+		setTurnOrientation(loc, loc, loc, loc);
 	}
 
-	private static final double l = 21, w = 21, r = Math
-			.sqrt((l * l) + (w * w));
+	private static final double l = 21, w = 21, r = Math.sqrt((l * l) + (w * w));
 
-	public static boolean isBigBirdTurnEncConnected() {
-		return bigBird.isTurnEncConnected();
+	public static boolean isModuleATurnEncConnected() {
+		return moduleA.isTurnEncConnected();
 	}
 
-	public static boolean isBigHorseTurnEncConnected() {
-		return bigHorse.isTurnEncConnected();
+	public static boolean isModuleBTurnEncConnected() {
+		return moduleB.isTurnEncConnected();
 	}
 
-	public static boolean isBigGiraffeTurnEncConnected() {
-		return bigGiraffe.isTurnEncConnected();
+	public static boolean isModuleCTurnEncConnected() {
+		return moduleC.isTurnEncConnected();
 	}
 
-	public static boolean isBigSushiTurnEncConnected() {
-		return bigSushi.isTurnEncConnected();
+	public static boolean isModuleDTurnEncConnected() {
+		return moduleD.isTurnEncConnected();
 	}
 
 	public static void resetAllEnc() {
-		bigBird.restTurnEnc();
-		bigHorse.restTurnEnc();
-		bigGiraffe.restTurnEnc();
-		bigSushi.restTurnEnc();
+		moduleA.restTurnEnc();
+		moduleB.restTurnEnc();
+		moduleC.restTurnEnc();
+		moduleD.restTurnEnc();
 	}
 
 	public static void stopDrive() {
-		bigBird.stopDrive();
-		bigHorse.stopDrive();
-		bigGiraffe.stopDrive();
-		bigSushi.stopDrive();
+		moduleA.stopDrive();
+		moduleB.stopDrive();
+		moduleC.stopDrive();
+		moduleD.stopDrive();
 	}
 
 	private static double angleToLoc(double angle) {
@@ -129,15 +130,15 @@ public class DriveTrain implements PIDOutput {
 	public static void setOffSets() {
 		if (!offSetSet) {
 			double bbOff = 0, bhOff = 0, bgOff = 0, bsOff = 0;
-			bigBird.setTurnPower(0);
-			bigGiraffe.setTurnPower(0);
-			bigHorse.setTurnPower(0);
-			bigSushi.setTurnPower(0);
+			moduleA.setTurnPower(0);
+			moduleC.setTurnPower(0);
+			moduleB.setTurnPower(0);
+			moduleD.setTurnPower(0);
 
-			bbOff = DriveTrain.bigBird.getAbsPos();
-			bhOff = DriveTrain.bigHorse.getAbsPos();
-			bgOff = DriveTrain.bigGiraffe.getAbsPos();
-			bsOff = DriveTrain.bigSushi.getAbsPos();
+			bbOff = DriveTrain.moduleA.getAbsPos();
+			bhOff = DriveTrain.moduleB.getAbsPos();
+			bgOff = DriveTrain.moduleC.getAbsPos();
+			bsOff = DriveTrain.moduleD.getAbsPos();
 
 			System.out.println("BBoff: " + bbOff);
 			System.out.println("BHoff: " + bhOff);
@@ -145,10 +146,10 @@ public class DriveTrain implements PIDOutput {
 			System.out.println("BSoff: " + bsOff);
 
 			resetAllEnc();
-			bigBird.setEncPos((int) (locSub(bbOff, Constants.DT_BB_ABS_ZERO) * 4095d));
-			bigHorse.setEncPos((int) (locSub(bhOff, Constants.DT_BH_ABS_ZERO) * 4095d));
-			bigGiraffe.setEncPos((int) (locSub(bgOff,Constants.DT_BG_ABS_ZERO) * 4095d));
-			bigSushi.setEncPos((int) (locSub(bsOff, Constants.DT_BS_ABS_ZERO) * 4095d));
+			moduleA.setEncPos((int) (locSub(bbOff, Constants.DT_A_ABS_ZERO) * 4095d));
+			moduleB.setEncPos((int) (locSub(bhOff, Constants.DT_B_ABS_ZERO) * 4095d));
+			moduleC.setEncPos((int) (locSub(bgOff, Constants.DT_C_ABS_ZERO) * 4095d));
+			moduleD.setEncPos((int) (locSub(bsOff, Constants.DT_D_ABS_ZERO) * 4095d));
 			offSetSet = true;
 		}
 	}
@@ -165,24 +166,24 @@ public class DriveTrain implements PIDOutput {
 		}
 	}
 
-	public static double getHyroAngle() {
-		return hyro.getAngle();
+	public static double getgyroAngle() {
+		return gyro.getAngle();
 	}
 
-	public static double getHyroAngleInRad() {
-		return hyro.getAngle() * (Math.PI / 180d);
+	public static double getGyroAngleInRad() {
+		return gyro.getAngle() * (Math.PI / 180d);
 	}
 
-	public static void setDriveBreakMode(boolean b) {
-		bigBird.setBreakMode(b);
-		bigHorse.setBreakMode(b);
-		bigGiraffe.setBreakMode(b);
-		bigSushi.setBreakMode(b);
+	public static void setDriveBrakeMode(boolean b) {
+		moduleA.setBrakeMode(b);
+		moduleB.setBrakeMode(b);
+		moduleC.setBrakeMode(b);
+		moduleD.setBrakeMode(b);
 	}
 
 	public static double getAverageError() {
-		return (Math.abs(bigBird.getError()) + Math.abs(bigHorse.getError())
-				+ Math.abs(bigGiraffe.getError()) + Math.abs(bigSushi
+		return (Math.abs(moduleA.getError()) + Math.abs(moduleB.getError())
+				+ Math.abs(moduleC.getError()) + Math.abs(moduleD
 				.getError())) / 4d;
 	}
 
@@ -217,7 +218,7 @@ public class DriveTrain implements PIDOutput {
 			ws4 /= max;
 		}
 		DriveTrain.setDrivePower(ws4, ws2, ws1, ws3);
-		DriveTrain.setLocation(angleToLoc(wa4), angleToLoc(wa2),
+		DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),
 				angleToLoc(wa1), angleToLoc(wa3));
 	}
 
@@ -227,20 +228,20 @@ public class DriveTrain implements PIDOutput {
 
 		if (Math.abs(fwd) < .15 && Math.abs(str) < .15 && Math.abs(rot) < 0.01) {
 			// setOffSets();
-			setDriveBreakMode(true);
+			setDriveBrakeMode(true);
 			stopDrive();
 		} else {
-			setDriveBreakMode(false);
+			setDriveBrakeMode(false);
 			swerveDrive(fwd, str, rot);
 			// resetOffSet();
 		}
 	}
 
 	public static void pidDrive(double fwd, double str, double angle) {
-		double temp = (fwd * Math.cos(getHyroAngleInRad()))
-				+ (str * Math.sin(getHyroAngleInRad()));
-		str = (-fwd * Math.sin(getHyroAngleInRad()))
-				+ (str * Math.cos(getHyroAngleInRad()));
+		double temp = (fwd * Math.cos(getGyroAngleInRad()))
+				+ (str * Math.sin(getGyroAngleInRad()));
+		str = (-fwd * Math.sin(getGyroAngleInRad()))
+				+ (str * Math.cos(getGyroAngleInRad()));
 		fwd = temp;
 		if (!pidControllerRot.isEnabled())
 			pidControllerRot.enable();
@@ -248,7 +249,7 @@ public class DriveTrain implements PIDOutput {
 			pidFWD = 0;
 			pidSTR = 0;
 		} else {
-			setDriveBreakMode(false);
+			setDriveBrakeMode(false);
 			pidFWD = fwd;
 			pidSTR = str;
 		}
@@ -256,16 +257,17 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static void fieldCentricDrive(double fwd, double str, double rot) {
-		double temp = (fwd * Math.cos(getHyroAngleInRad()))
-				+ (str * Math.sin(getHyroAngleInRad()));
-		str = (-fwd * Math.sin(getHyroAngleInRad()))
-				+ (str * Math.cos(getHyroAngleInRad()));
+		// pretty sure str is the strafe amount (dvv)
+		double temp = (fwd * Math.cos(getGyroAngleInRad()))
+				+ (str * Math.sin(getGyroAngleInRad()));
+		str = (-fwd * Math.sin(getGyroAngleInRad()))
+				+ (str * Math.cos(getGyroAngleInRad()));
 		fwd = temp;
 		humanDrive(fwd, str, rot);
 	}
 
 	public static void tankDrive(double left, double right) {
-		setAllLocation(0);
+		setAllTurnOrientiation(0);
 		setDrivePower(right, left, right, left);
 	}
 
