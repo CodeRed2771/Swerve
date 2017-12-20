@@ -129,27 +129,27 @@ public class DriveTrain implements PIDOutput {
 
 	public static void setOffSets() {
 		if (!offSetSet) {
-			double bbOff = 0, bhOff = 0, bgOff = 0, bsOff = 0;
+			double modAOff = 0, modBOff = 0, modCOff = 0, modDOff = 0;
 			moduleA.setTurnPower(0);
 			moduleC.setTurnPower(0);
 			moduleB.setTurnPower(0);
 			moduleD.setTurnPower(0);
 
-			bbOff = DriveTrain.moduleA.getAbsPos();
-			bhOff = DriveTrain.moduleB.getAbsPos();
-			bgOff = DriveTrain.moduleC.getAbsPos();
-			bsOff = DriveTrain.moduleD.getAbsPos();
+			modAOff = DriveTrain.moduleA.getAbsPos();
+			modBOff = DriveTrain.moduleB.getAbsPos();
+			modCOff = DriveTrain.moduleC.getAbsPos();
+			modDOff = DriveTrain.moduleD.getAbsPos();
 
-			System.out.println("BBoff: " + bbOff);
-			System.out.println("BHoff: " + bhOff);
-			System.out.println("BGoff: " + bgOff);
-			System.out.println("BSoff: " + bsOff);
+			System.out.println("BBoff: " + modAOff);
+			System.out.println("BHoff: " + modBOff);
+			System.out.println("BGoff: " + modCOff);
+			System.out.println("BSoff: " + modDOff);
 
 			resetAllEnc();
-			moduleA.setEncPos((int) (locSub(bbOff, Constants.DT_A_ABS_ZERO) * 4095d));
-			moduleB.setEncPos((int) (locSub(bhOff, Constants.DT_B_ABS_ZERO) * 4095d));
-			moduleC.setEncPos((int) (locSub(bgOff, Constants.DT_C_ABS_ZERO) * 4095d));
-			moduleD.setEncPos((int) (locSub(bsOff, Constants.DT_D_ABS_ZERO) * 4095d));
+			moduleA.setEncPos((int) (locSub(modAOff, Constants.DT_A_ABS_ZERO) * 4095d));
+			moduleB.setEncPos((int) (locSub(modBOff, Constants.DT_B_ABS_ZERO) * 4095d));
+			moduleC.setEncPos((int) (locSub(modCOff, Constants.DT_C_ABS_ZERO) * 4095d));
+			moduleD.setEncPos((int) (locSub(modDOff, Constants.DT_D_ABS_ZERO) * 4095d));
 			offSetSet = true;
 		}
 	}
@@ -182,9 +182,10 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static double getAverageError() {
-		return (Math.abs(moduleA.getError()) + Math.abs(moduleB.getError())
-				+ Math.abs(moduleC.getError()) + Math.abs(moduleD
-				.getError())) / 4d;
+		return (Math.abs(moduleA.getError()) + 
+				Math.abs(moduleB.getError()) + 
+				Math.abs(moduleC.getError()) + 
+				Math.abs(moduleD.getError())) / 4d;
 	}
 
 	/*
@@ -217,6 +218,7 @@ public class DriveTrain implements PIDOutput {
 			ws3 /= max;
 			ws4 /= max;
 		}
+		
 		DriveTrain.setDrivePower(ws4, ws2, ws1, ws3);
 		DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),
 				angleToLoc(wa1), angleToLoc(wa3));
@@ -237,33 +239,32 @@ public class DriveTrain implements PIDOutput {
 		}
 	}
 
-	public static void pidDrive(double fwd, double str, double angle) {
+	public static void pidDrive(double fwd, double strafe, double angle) {
 		double temp = (fwd * Math.cos(getGyroAngleInRad()))
-				+ (str * Math.sin(getGyroAngleInRad()));
-		str = (-fwd * Math.sin(getGyroAngleInRad()))
-				+ (str * Math.cos(getGyroAngleInRad()));
+				+ (strafe * Math.sin(getGyroAngleInRad()));
+		strafe = (-fwd * Math.sin(getGyroAngleInRad()))
+				+ (strafe * Math.cos(getGyroAngleInRad()));
 		fwd = temp;
 		if (!pidControllerRot.isEnabled())
 			pidControllerRot.enable();
-		if (Math.abs(fwd) < .15 && Math.abs(str) < .15) {
+		if (Math.abs(fwd) < .15 && Math.abs(strafe) < .15) {
 			pidFWD = 0;
 			pidSTR = 0;
 		} else {
 			setDriveBrakeMode(false);
 			pidFWD = fwd;
-			pidSTR = str;
+			pidSTR = strafe;
 		}
 		pidControllerRot.setSetpoint(angle);
 	}
 
-	public static void fieldCentricDrive(double fwd, double str, double rot) {
-		// pretty sure str is the strafe amount (dvv)
+	public static void fieldCentricDrive(double fwd, double strafe, double rot) {
 		double temp = (fwd * Math.cos(getGyroAngleInRad()))
-				+ (str * Math.sin(getGyroAngleInRad()));
-		str = (-fwd * Math.sin(getGyroAngleInRad()))
-				+ (str * Math.cos(getGyroAngleInRad()));
+				+ (strafe * Math.sin(getGyroAngleInRad()));
+		strafe = (-fwd * Math.sin(getGyroAngleInRad()))
+				+ (strafe * Math.cos(getGyroAngleInRad()));
 		fwd = temp;
-		humanDrive(fwd, str, rot);
+		humanDrive(fwd, strafe, rot);
 	}
 
 	public static void tankDrive(double left, double right) {

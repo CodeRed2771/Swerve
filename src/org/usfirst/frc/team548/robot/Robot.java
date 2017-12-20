@@ -45,7 +45,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putBoolean("Mod B Turn Encoder", DriveTrain.isModuleBTurnEncConnected());
     	SmartDashboard.putBoolean("Mod C Turn Encoder", DriveTrain.isModuleCTurnEncConnected());
     	SmartDashboard.putBoolean("Mod D Turn Encoder", DriveTrain.isModuleDTurnEncConnected());
-    	SmartDashboard.putNumber("Hyro", DriveTrain.getgyroAngle());
+    	SmartDashboard.putNumber("Gyro angle", DriveTrain.getgyroAngle());
+    	SmartDashboard.putNumber("Gyro radians",  DriveTrain.getGyroAngleInRad());
     	SmartDashboard.putNumber("Avg. Error", DriveTrain.getAverageError());
     	
     	xbox.setRightRumble(Math.pow(DriveTrain.getAverageError()/1300d, 2));
