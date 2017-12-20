@@ -1,5 +1,12 @@
 package org.usfirst.frc.team548.robot;
 
+
+// DVV - I feel like the code in fieldCentricDrive is wrong in how it's using radians instead of just angle
+//       or is that the same? Accordign to the white paper, the value used in the sin/cos functions should
+//		 be "the gyro angle".  What is that?  I would assume that if we're turned a quarter turn, the gyro
+//		 angle would be "90".  If so, we need to determine if we should be using a full 360, or 0-180,and -180 to 0.
+//
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -21,6 +28,9 @@ public class DriveTrain implements PIDOutput {
 			instance = new DriveTrain();
 		return instance;
 	}
+
+	// define robot dimensions. L=wheel base W=track width
+	private static final double l = 21, w = 21, r = Math.sqrt((l * l) + (w * w));
 
 	private DriveTrain() {
 		moduleA = new Module(Constants.DT_A_DRIVE_TALON_ID,
@@ -65,12 +75,12 @@ public class DriveTrain implements PIDOutput {
 		moduleD.setTurnPower(bsPower);
 	}
 
-	public static void setTurnOrientation(double bbLoc, double bhLoc, double bgLoc,
-			double bsLoc) {
-		moduleA.setTurnOrientation(bbLoc);
-		moduleB.setTurnOrientation(bhLoc);
-		moduleC.setTurnOrientation(bgLoc);
-		moduleD.setTurnOrientation(bsLoc);
+	public static void setTurnOrientation(double modALoc, double modBLoc, double modCLoc,
+			double modDLoc) {
+		moduleA.setTurnOrientation(modALoc);
+		moduleB.setTurnOrientation(modBLoc);
+		moduleC.setTurnOrientation(modCLoc);
+		moduleD.setTurnOrientation(modDLoc);
 	}
 
 	public static void setAllTurnPower(double power) {
@@ -84,8 +94,6 @@ public class DriveTrain implements PIDOutput {
 	public static void setAllTurnOrientiation(double loc) {
 		setTurnOrientation(loc, loc, loc, loc);
 	}
-
-	private static final double l = 21, w = 21, r = Math.sqrt((l * l) + (w * w));
 
 	public static boolean isModuleATurnEncConnected() {
 		return moduleA.isTurnEncConnected();
@@ -140,10 +148,10 @@ public class DriveTrain implements PIDOutput {
 			modCOff = DriveTrain.moduleC.getAbsPos();
 			modDOff = DriveTrain.moduleD.getAbsPos();
 
-			System.out.println("BBoff: " + modAOff);
-			System.out.println("BHoff: " + modBOff);
-			System.out.println("BGoff: " + modCOff);
-			System.out.println("BSoff: " + modDOff);
+//			System.out.println("BBoff: " + modAOff);
+//			System.out.println("BHoff: " + modBOff);
+//			System.out.println("BGoff: " + modCOff);
+//			System.out.println("BSoff: " + modDOff);
 
 			resetAllEnc();
 			moduleA.setEncPos((int) (locSub(modAOff, Constants.DT_A_ABS_ZERO) * 4095d));
@@ -205,10 +213,10 @@ public class DriveTrain implements PIDOutput {
 		double c = fwd - (rot * (w / r));
 		double d = fwd + (rot * (w / r));
 
-		double ws1 = Math.sqrt((b * b) + (c * c));
-		double ws2 = Math.sqrt((b * b) + (d * d));
-		double ws3 = Math.sqrt((a * a) + (d * d));
-		double ws4 = Math.sqrt((a * a) + (c * c));
+		double ws1 = Math.sqrt((b * b) + (c * c));  // front_right  (CHECK THESE AGAINST OUR BOT)
+		double ws2 = Math.sqrt((b * b) + (d * d));  // front_left
+		double ws3 = Math.sqrt((a * a) + (d * d));	// rear_left
+		double ws4 = Math.sqrt((a * a) + (c * c)); 	// rear_right
 
 		double wa1 = Math.atan2(b, c) * 180 / Math.PI;
 		double wa2 = Math.atan2(b, d) * 180 / Math.PI;
