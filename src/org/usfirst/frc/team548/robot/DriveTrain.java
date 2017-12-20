@@ -171,8 +171,15 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static double getGyroAngleInRad() {
-		return gyro.getAngle() * (Math.PI / 180d);
+		double adjustedAngle = Math.floorMod((long)gyro.getAngle(), 360);
+		if (adjustedAngle>180) 
+			adjustedAngle = -(360-adjustedAngle);
+		
+		return adjustedAngle * (Math.PI / 180d);
 	}
+//	public static double getGyroAngleInRad() {
+//		return gyro.getAngle() * (Math.PI / 180d);
+//	}
 
 	public static void setDriveBrakeMode(boolean b) {
 		moduleA.setBrakeMode(b);
