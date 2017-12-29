@@ -66,6 +66,9 @@ public class Module {
 		return (turn.getPulseWidthPosition() & 0xFFF)/4095d;
 	}
 
+	public int getDriveEnc() {
+		return drive.getEncPosition();
+	}
 	/**
 	 * Lets reset the turn encoder position to 0
 	 */

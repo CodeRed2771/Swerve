@@ -83,6 +83,18 @@ public class DriveTrain implements PIDOutput {
 		moduleD.setTurnOrientation(modDLoc);
 	}
 
+	public static int getDriveEnc() {
+		return moduleA.getDriveEnc();
+	}
+	
+	public static void autoSetDrive(double speed) {
+		
+	}
+	
+	public static void autoSetRot(double rot) {
+		
+	}
+
 	public static void setAllTurnPower(double power) {
 		setTurnPower(power, power, power, power);
 	}
