@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot {
 	private XboxController xbox;
 	private DriverStation dt;
     public void robotInit() {
-      xbox = new XboxController(Constants.XBOX_PORT);
+      xbox = new XboxController(Calibration.XBOX_PORT);
       DriveTrain.getInstance();
       dt = DriverStation.getInstance();
     }

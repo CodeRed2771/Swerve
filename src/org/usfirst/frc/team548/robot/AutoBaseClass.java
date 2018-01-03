@@ -54,8 +54,8 @@ public abstract class AutoBaseClass {
 		return mDriveAuto;
 	}
 
-	public void driveInches(double distance, double maxPower) {
-		mDriveAuto.driveInches(distance, maxPower);
+	public void driveInches(double distance, double angle, double maxPower) {
+		mDriveAuto.driveInches(distance, angle, maxPower);
 	}
 
 	public void turnDegrees(double degrees, double maxPower) {

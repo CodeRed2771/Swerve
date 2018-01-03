@@ -38,7 +38,7 @@ public class DriveAuto {
        
     }
     
-	public void driveInches(double inches, double maxPower, double startPowerLevel) {
+	public void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
         maxPowerAllowed = maxPower;
         curPowerSetting = startPowerLevel;  // the minimum power required to start moving.  (Untested)
 
@@ -49,7 +49,7 @@ public class DriveAuto {
         drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
     }
     
-    public void driveInches(double inches, double maxPower) {
+    public void driveInches(double inches, double angle,  double maxPower) {
     	driveInches(inches, maxPower, minDriveStartPower);
     }
 

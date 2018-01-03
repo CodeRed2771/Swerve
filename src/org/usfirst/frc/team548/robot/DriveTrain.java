@@ -33,20 +33,20 @@ public class DriveTrain implements PIDOutput {
 	private static final double l = 21, w = 21, r = Math.sqrt((l * l) + (w * w));
 
 	private DriveTrain() {
-		moduleA = new Module(Constants.DT_A_DRIVE_TALON_ID,
-				Constants.DT_A_TURN_TALON_ID, 4.20, 0.01, 0, 200);
-		moduleB = new Module(Constants.DT_B_DRIVE_TALON_ID,
-				Constants.DT_B_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
-		moduleC = new Module(Constants.DT_C_DRIVE_TALON_ID,
-				Constants.DT_C_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
-		moduleD = new Module(Constants.DT_D_DRIVE_TALON_ID,
-				Constants.DT_D_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleA = new Module(Calibration.DT_A_DRIVE_TALON_ID,
+				Calibration.DT_A_TURN_TALON_ID, 4.20, 0.01, 0, 200);
+		moduleB = new Module(Calibration.DT_B_DRIVE_TALON_ID,
+				Calibration.DT_B_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleC = new Module(Calibration.DT_C_DRIVE_TALON_ID,
+				Calibration.DT_C_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+		moduleD = new Module(Calibration.DT_D_DRIVE_TALON_ID,
+				Calibration.DT_D_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
 																	
 		gyro = new AHRS(SerialPort.Port.kUSB);
 		
 		//PID is for PID drive not for the modules
-		pidControllerRot = new PIDController(Constants.DT_ROT_PID_P,
-				Constants.DT_ROT_PID_I, Constants.DT_ROT_PID_D, gyro, this);
+		pidControllerRot = new PIDController(Calibration.DT_ROT_PID_P,
+				Calibration.DT_ROT_PID_I, Calibration.DT_ROT_PID_D, gyro, this);
 		pidControllerRot.setInputRange(-180.0f, 180.0f);
 		pidControllerRot.setOutputRange(-1.0, 1.0);
 		pidControllerRot.setContinuous(true);
@@ -88,7 +88,7 @@ public class DriveTrain implements PIDOutput {
 	}
 	
 	public static void autoSetDrive(double speed) {
-		
+		swerveDrive(speed,0,0);
 	}
 	
 	public static void autoSetRot(double rot) {
@@ -166,10 +166,10 @@ public class DriveTrain implements PIDOutput {
 //			System.out.println("BSoff: " + modDOff);
 
 			resetAllEnc();
-			moduleA.setEncPos((int) (locSub(modAOff, Constants.DT_A_ABS_ZERO) * 4095d));
-			moduleB.setEncPos((int) (locSub(modBOff, Constants.DT_B_ABS_ZERO) * 4095d));
-			moduleC.setEncPos((int) (locSub(modCOff, Constants.DT_C_ABS_ZERO) * 4095d));
-			moduleD.setEncPos((int) (locSub(modDOff, Constants.DT_D_ABS_ZERO) * 4095d));
+			moduleA.setEncPos((int) (locSub(modAOff, Calibration.DT_A_ABS_ZERO) * 4095d));
+			moduleB.setEncPos((int) (locSub(modBOff, Calibration.DT_B_ABS_ZERO) * 4095d));
+			moduleC.setEncPos((int) (locSub(modCOff, Calibration.DT_C_ABS_ZERO) * 4095d));
+			moduleD.setEncPos((int) (locSub(modDOff, Calibration.DT_D_ABS_ZERO) * 4095d));
 			offSetSet = true;
 		}
 	}
@@ -306,13 +306,13 @@ public class DriveTrain implements PIDOutput {
 
 	@Override
 	public void pidWrite(double output) {
-		if (Math.abs(pidControllerRot.getError()) < Constants.DT_ROT_PID_IZONE) {
-			pidControllerRot.setPID(Constants.DT_ROT_PID_P,
-					Constants.DT_ROT_PID_I, Constants.DT_ROT_PID_D);
+		if (Math.abs(pidControllerRot.getError()) < Calibration.DT_ROT_PID_IZONE) {
+			pidControllerRot.setPID(Calibration.DT_ROT_PID_P,
+					Calibration.DT_ROT_PID_I, Calibration.DT_ROT_PID_D);
 		} else {
 			// I Zone
-			pidControllerRot.setPID(Constants.DT_ROT_PID_P, 0,
-					Constants.DT_ROT_PID_D);
+			pidControllerRot.setPID(Calibration.DT_ROT_PID_P, 0,
+					Calibration.DT_ROT_PID_D);
 			pidControllerRot.setContinuous(true);
 		}
 		swerveDrive(pidFWD, pidSTR, output);
