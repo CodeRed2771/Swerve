@@ -92,7 +92,7 @@ public class DriveTrain implements PIDOutput {
 	}
 	
 	public static void autoSetRot(double rot) {
-		
+		swerveDrive(0,0,rot);
 	}
 
 	public static void setAllTurnPower(double power) {
@@ -123,12 +123,12 @@ public class DriveTrain implements PIDOutput {
 		return moduleD.isTurnEncConnected();
 	}
 
-	public static void resetAllEnc() {
-		moduleA.restTurnEnc();
-		moduleB.restTurnEnc();
-		moduleC.restTurnEnc();
-		moduleD.restTurnEnc();
-	}
+//	public static void resetAllEnc() {
+//		moduleA.restTurnEnc();
+//		moduleB.restTurnEnc();
+//		moduleC.restTurnEnc();
+//		moduleD.restTurnEnc();
+//	}
 
 	public static void stopDrive() {
 		moduleA.stopDrive();
@@ -165,7 +165,7 @@ public class DriveTrain implements PIDOutput {
 //			System.out.println("BGoff: " + modCOff);
 //			System.out.println("BSoff: " + modDOff);
 
-			resetAllEnc();
+//			resetAllEnc(); removed 1/8/18
 			moduleA.setEncPos((int) (locSub(modAOff, Calibration.DT_A_ABS_ZERO) * 4095d));
 			moduleB.setEncPos((int) (locSub(modBOff, Calibration.DT_B_ABS_ZERO) * 4095d));
 			moduleC.setEncPos((int) (locSub(modCOff, Calibration.DT_C_ABS_ZERO) * 4095d));

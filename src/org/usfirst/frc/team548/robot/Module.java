@@ -1,12 +1,10 @@
 package org.usfirst.frc.team548.robot;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
-import com.ctre.CANTalon.FeedbackDeviceStatus;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Module {
-	private CANTalon drive, turn;
+	private WPI_TalonSRX drive, turn;
 	private final double FULL_ROTATION = 4096d, TURN_P, TURN_I, TURN_D;
 	private final int TURN_IZONE;
 	
@@ -20,17 +18,21 @@ public class Module {
 	 * @param tIZone I might not need to know the I Zone value for the turning PID
 	 */
 	public Module(int driveTalonID, int turnTalonID, double tP, double tI, double tD, int tIZone) {
-		drive = new CANTalon(driveTalonID);
+		drive = new WPI_TalonSRX(driveTalonID);
 
-		turn = new CANTalon(turnTalonID);
-		turn.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+		turn = new WPI_TalonSRX(turnTalonID);
+	
+		turn.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0); // ?? don't know if zeros are right
 		TURN_P = tP;
 		TURN_I = tI;
 		TURN_D = tD;
 		TURN_IZONE = tIZone;
-		turn.reverseOutput(false);
-		turn.setPID(TURN_P, TURN_I, TURN_D);
-		turn.setIZone(TURN_IZONE);
+		// turn.reverseOutput(false); seemed unnecessary
+		//turn.setPID(TURN_P, TURN_I, TURN_D);
+		turn.config_kP(0,  TURN_P, 500);
+		turn.config_kI(0,  TURN_I, 500);
+		turn.config_kD(0,  TURN_D, 500);
+		//turn.setIZone(TURN_IZONE); not sure what to replace this with 1/8
 	}
 	
 	/**
@@ -38,8 +40,9 @@ public class Module {
 	 * @param p value from -1 to 1
 	 */
 	public void setTurnPower(double p) {
-		this.turn.changeControlMode(TalonControlMode.PercentVbus); // 'Vbus' is short for 'Van V. Party Bus(woo woo!)'
-		this.turn.set(p);
+		this.turn.set(ControlMode.PercentOutput, p); 
+		//this.turn.changeControlMode(TalonControlMode.PercentVbus); // 'Vbus' is short for 'Van V. Party Bus(woo woo!)'
+		//this.turn.set(p);
 	}
 
 	/**
@@ -52,10 +55,11 @@ public class Module {
 
 	/**
 	 * Getting the turn encoder position
-	 * @return turn encoder postition
+	 * @return turn encoder position
 	 */
 	public double getTurnEncPos() {
-		return turn.getEncPosition();
+		//return turn.getEncPosition();
+		return turn.getSelectedSensorPosition(0);
 	}
 
 	/**
@@ -63,42 +67,48 @@ public class Module {
 	 * @return
 	 */
 	public double getAbsPos() {
-		return (turn.getPulseWidthPosition() & 0xFFF)/4095d;
+		// return (turn.getPulseWidthPosition() & 0xFFF)/4095d;
+		return (turn.getSensorCollection().getPulseWidthPosition() & 0xFFF)/4095d;
 	}
 
 	public int getDriveEnc() {
-		return drive.getEncPosition();
+		return drive.getSelectedSensorPosition(0);
 	}
 	/**
 	 * Lets reset the turn encoder position to 0
 	 */
-	public void restTurnEnc() {
-		this.turn.setEncPosition(0);
-	}
+//	public void restTurnEnc() {
+//		// this.turn.setEncPosition(0); 
+//		this.turn.getSensorCollection().setQuadraturePosition(0,500); // I DON'T THINK THIS IS RIGHT
+//	}
 
 	
 	public void setEncPos(int d) {
-		turn.setEncPosition(d);
+		//turn.setEncPosition(d);
+		turn.getSensorCollection().setQuadraturePosition(d, 500);
 	}
 	/**
 	 * Is electrical good? Probably not.... Is the turn encoder connected?
 	 * @return true if the encoder is connected
 	 */
 	public boolean isTurnEncConnected() {
-		return turn.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) == FeedbackDeviceStatus.FeedbackStatusPresent;
+		//return turn.isSensorPresent(FeedbackDevice.CtreMagEncoder_Relative) == FeedbackDeviceStatus.FeedbackStatusPresent;
+		return true;  // didn't immediately see a compatible replacement
 	}
 	
 	public int getTurnRotations() {
-		return (int) (turn.getEncPosition() / FULL_ROTATION);
+		return (int) (turn.getSelectedSensorPosition(0) / FULL_ROTATION);
 	}
 	
 	public double getTurnOrientation() {
-		return (turn.getEncPosition() % FULL_ROTATION) / FULL_ROTATION;
+		//return (turn.getEncPosition() % FULL_ROTATION) / FULL_ROTATION;
+		return (turn.getSelectedSensorPosition(0) % FULL_ROTATION) / FULL_ROTATION;
 	}
 	
 	public void setTurnPIDToSetPoint(double setpoint) {
-		turn.changeControlMode(TalonControlMode.Position);
-		turn.set(setpoint);
+		//turn.changeControlMode(ControlMode.Position);
+		//turn.set(setpoint);
+		turn.set(ControlMode.Position, setpoint);
 	}
 	
 	/**
@@ -106,7 +116,7 @@ public class Module {
 	 * @param setLoc orientation to set to
 	 */	
 	public void setTurnOrientation(double loc) {
-		turn.changeControlMode(TalonControlMode.Position);
+		//turn.changeControlMode(TalonControlMode.Position);
 		double base = getTurnRotations() * FULL_ROTATION;
 		if (getTurnEncPos() >= 0) {
 			if ((base + (loc * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
@@ -114,20 +124,20 @@ public class Module {
 			} else if ((base + (loc * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
-			turn.set((((loc * FULL_ROTATION) + (base))));
+			turn.set(ControlMode.Position, (((loc * FULL_ROTATION) + (base))));
 		} else {
 			if ((base - ((1-loc) * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
 				base += FULL_ROTATION;
 			} else if ((base -((1-loc) * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
-			turn.set((base- (((1-loc) * FULL_ROTATION))));	
+			turn.set(ControlMode.Position, (base- (((1-loc) * FULL_ROTATION))));	
 		}
 	}
 	
 	
 	public double getError() {
-		return turn.getError();
+		return turn.getClosedLoopError(0);
 	}
 	
 	public void stopBoth() {
@@ -140,7 +150,8 @@ public class Module {
 	}
 	
 	public void setBrakeMode(boolean b) {
-		drive.enableBrakeMode(b);
+		//drive.enableBrakeMode(b);
+		drive.setNeutralMode(b ? NeutralMode.Brake : NeutralMode.Coast);
 	}
 	
 	

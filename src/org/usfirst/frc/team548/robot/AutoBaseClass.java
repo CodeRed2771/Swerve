@@ -3,6 +3,7 @@ package org.usfirst.frc.team548.robot;
 import org.usfirst.frc.team548.robot.DriveAuto;
 import com.coderedrobotics.libs.Timer;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class AutoBaseClass {
@@ -17,6 +18,19 @@ public abstract class AutoBaseClass {
 		mAutoTimer = new Timer();
 	}
 
+	public String getGameData() {
+		String gameData;
+		return DriverStation.getInstance().getGameSpecificMessage();
+	}
+	
+	public char getMySwitchSide() {
+		return getGameData().charAt(0);
+	}
+	
+	public char getMyScaleSide() {
+		return getGameData().charAt(1);
+	}
+	
 	public abstract void tick();
 
 	public void start() {

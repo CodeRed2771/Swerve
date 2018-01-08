@@ -1,17 +1,19 @@
 package org.usfirst.frc.team548.robot;
 
-import com.coderedrobotics.libs.PIDControllerAIAO;
 import com.coderedrobotics.libs.PIDSourceFilter;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveAuto {
-	private PIDControllerAIAO drivePID;
-    private PIDControllerAIAO rotDrivePID;
+//	private PIDControllerAIAO drivePID;
+//    private PIDControllerAIAO rotDrivePID;
+	private PIDController drivePID;
+    private PIDController rotDrivePID;
 
-   // private ADXRS450_Gyro gyro;
-    private ADXRS450_Gyro gyro;
+    private AHRS gyro;
     private double minDriveStartPower = .1;
 
     private double maxPowerAllowed = 1;
@@ -19,13 +21,15 @@ public class DriveAuto {
     
     public void DriveAuto() {
     	DriveTrain.getInstance();
-    	this.gyro = gyro;
+    	this.gyro = DriveTrain.getgyro();
+    	PIDSourceFilter pidInputForDrive; 
 
-//       drivePID = new PIDControllerAIAO(
-//       		0, 0, 0, new PIDSourceFilter((double value) -> -(mainDrive.getRightEncoderObject().get())), speed -> mainDrive.autoSetDrive(speed), false, "autodrive");
-       drivePID = new PIDControllerAIAO(
-       		0, 0, 0, new PIDSourceFilter((double value) -> -(DriveTrain.getDriveEnc())), speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
-       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
+    	pidInputForDrive = new PIDSourceFilter((double value) -> -(DriveTrain.getDriveEnc()));
+    	
+//       drivePID = new PIDControllerAIAO(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
+//       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
+       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed));
+       rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot));
 
        drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
        rotDrivePID.setAbsoluteTolerance(1.5);  // degrees off 
