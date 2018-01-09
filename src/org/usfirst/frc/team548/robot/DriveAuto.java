@@ -34,8 +34,8 @@ public class DriveAuto {
        drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
        rotDrivePID.setAbsoluteTolerance(1.5);  // degrees off 
        
-       rotDrivePID.setToleranceBuffer(3);        
-       drivePID.setToleranceBuffer(3); 
+       //rotDrivePID.setToleranceBuffer(3);        
+       //drivePID.setToleranceBuffer(3); 
        
        drivePID.setSetpoint(0);
        drivePID.reset();    
@@ -49,12 +49,15 @@ public class DriveAuto {
         SmartDashboard.putNumber("DRIVE INCHES", inches);
         
         setPowerOutput(curPowerSetting);
+        
+        DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle),
+        		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
 
         drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
     }
     
     public void driveInches(double inches, double angle,  double maxPower) {
-    	driveInches(inches, maxPower, minDriveStartPower);
+    	driveInches(inches, angle, maxPower, minDriveStartPower);
     }
 
     public void reset() {

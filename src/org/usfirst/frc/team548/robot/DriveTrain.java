@@ -137,7 +137,7 @@ public class DriveTrain implements PIDOutput {
 		moduleD.stopDrive();
 	}
 
-	private static double angleToLoc(double angle) {
+	public static double angleToLoc(double angle) {
 		if (angle < 0) {
 			return .5d + ((180d - Math.abs(angle)) / 360d);
 		} else {
