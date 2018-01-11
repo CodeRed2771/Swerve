@@ -4,25 +4,50 @@ package org.usfirst.frc.team548.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
 	private XboxController xbox;
 	private DriverStation dt;
+	
+	//---AUTO IMPORTS---
+	DriveAuto driveAuto;
+	SendableChooser autoChooser;
+	final String autoCalibrateDrive = "Auto Calibrate Drive";
+	String autoSelected;
+	AutoBaseClass mAutoProgram;
+	
+	
     public void robotInit() {
       xbox = new XboxController(Calibration.XBOX_PORT);
       DriveTrain.getInstance();
       dt = DriverStation.getInstance();
+      
+      driveAuto = new DriveAuto();
+      autoChooser = new SendableChooser();
+      autoChooser.addDefault(autoCalibrateDrive, autoCalibrateDrive);
+      
+      SmartDashboard.putData("Auto choices", autoChooser);
     }
     
-
     public void autonomousInit() {
-
+    	autoSelected = (String) autoChooser.getSelected();
+    	SmartDashboard.putString("Auto Selected: ", autoSelected);
+    	
+//    	switch(autoSelected){
+//    	case autoCalibrateDrive:
+    		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
+    		
+//    	}
+    	
+    	mAutoProgram.start();
     }
     
     public void autonomousPeriodic() {
     	DriveTrain.setAllTurnOrientiation(0);
+    	mAutoProgram.tick();
     }
     
     public void disabledInit() {

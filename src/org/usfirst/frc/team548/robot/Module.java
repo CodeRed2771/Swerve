@@ -32,6 +32,8 @@ public class Module {
 		turn.config_kP(0,  TURN_P, 500);
 		turn.config_kI(0,  TURN_I, 500);
 		turn.config_kD(0,  TURN_D, 500);
+		turn.config_IntegralZone(0, TURN_IZONE, 500);
+		turn.selectProfileSlot(0, 0);
 		//turn.setIZone(TURN_IZONE); not sure what to replace this with 1/8
 	}
 	

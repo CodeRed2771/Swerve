@@ -15,7 +15,7 @@ public final static int XBOX_PORT = 0;
 	// Physical Module - B
 	public final static int DT_B_DRIVE_TALON_ID = 5;
 	public final static int DT_B_TURN_TALON_ID = 6;
-	public final static double DT_B_ABS_ZERO = .272;
+	public final static double DT_B_ABS_ZERO = .214;
 	// Physical Module - C
 	public final static int DT_C_DRIVE_TALON_ID = 3;
 	public final static int DT_C_TURN_TALON_ID = 4;

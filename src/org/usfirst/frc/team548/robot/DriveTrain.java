@@ -88,6 +88,7 @@ public class DriveTrain implements PIDOutput {
 	}
 	
 	public static void autoSetDrive(double speed) {
+		SmartDashboard.putNumber("Auto Set Drive", speed);
 		swerveDrive(speed,0,0);
 	}
 	

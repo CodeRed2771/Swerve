@@ -1,5 +1,6 @@
 package org.usfirst.frc.team548.robot;
 
+
 import com.coderedrobotics.libs.PIDSourceFilter;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -19,7 +20,7 @@ public class DriveAuto {
     private double maxPowerAllowed = 1;
     private double curPowerSetting = 1;
     
-    public void DriveAuto() {
+    public DriveAuto() {
     	DriveTrain.getInstance();
     	this.gyro = DriveTrain.getgyro();
     	PIDSourceFilter pidInputForDrive; 
@@ -36,6 +37,10 @@ public class DriveAuto {
        
        //rotDrivePID.setToleranceBuffer(3);        
        //drivePID.setToleranceBuffer(3); 
+       
+       SmartDashboard.putNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P);
+       SmartDashboard.putNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I);
+       SmartDashboard.putNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D);
        
        drivePID.setSetpoint(0);
        drivePID.reset();    
