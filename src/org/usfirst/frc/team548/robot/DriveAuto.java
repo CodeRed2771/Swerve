@@ -27,6 +27,8 @@ public class DriveAuto {
 
     	pidInputForDrive = new PIDSourceFilter((double value) -> -(DriveTrain.getDriveEnc()));
     	
+    	SmartDashboard.putNumber("PID Get", pidInputForDrive.pidGet());
+    	
 //       drivePID = new PIDControllerAIAO(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
 //       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
        drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed));
@@ -165,6 +167,7 @@ public class DriveAuto {
         SmartDashboard.putNumber("Drive PID Get: ", drivePID.get());
         SmartDashboard.putNumber("Drive PID Error: ", drivePID.getError());
         SmartDashboard.putBoolean("Drive On Target", drivePID.onTarget());
+        SmartDashboard.putNumber("Drive Encoder", DriveTrain.getDriveEnc());
         
         SmartDashboard.putNumber("Gyro", round2(gyro.getAngle()));
         SmartDashboard.putNumber("Gyro PID Setpoint", rotDrivePID.getSetpoint());
