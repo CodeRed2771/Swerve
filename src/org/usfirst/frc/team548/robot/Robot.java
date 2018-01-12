@@ -36,6 +36,9 @@ public class Robot extends IterativeRobot {
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
     	
+    	
+    	driveAuto.reset();
+    	
 //    	switch(autoSelected){
 //    	case autoCalibrateDrive:
     		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
@@ -48,6 +51,8 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	DriveTrain.setAllTurnOrientiation(0);
     	mAutoProgram.tick();
+    	driveAuto.tick();
+		driveAuto.showEncoderValues();
     }
     
     public void disabledInit() {

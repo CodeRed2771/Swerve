@@ -31,7 +31,7 @@ public class DriveAuto {
     	
 //       drivePID = new PIDControllerAIAO(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
 //       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
-       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed));
+       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(-speed));
        rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot));
 
        drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance

@@ -89,7 +89,7 @@ public class DriveTrain implements PIDOutput {
 	
 	public static void autoSetDrive(double speed) {
 		SmartDashboard.putNumber("Auto Set Drive", speed);
-		swerveDrive(speed,0,0);
+		swerveAutoDrive(speed,0,0);
 	}
 	
 	public static void autoSetRot(double rot) {
@@ -246,6 +246,81 @@ public class DriveTrain implements PIDOutput {
 			ws3 /= max;
 			ws4 /= max;
 		}
+		
+		SmartDashboard.putNumber("swerve a", a);
+		SmartDashboard.putNumber("swerve b", b);
+		SmartDashboard.putNumber("swerve c", c);
+		SmartDashboard.putNumber("swerve d", d);
+		SmartDashboard.putNumber("swerve wa1", wa1);
+		SmartDashboard.putNumber("swerve wa2", wa2);
+		SmartDashboard.putNumber("swerve wa3", wa3);
+		SmartDashboard.putNumber("swerve wa4", wa4);
+		
+		DriveTrain.setDrivePower(ws4, ws2, ws1, ws3);
+		DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),
+				angleToLoc(wa1), angleToLoc(wa3));
+	}
+	
+	public static void swerveAutoDrive(double fwd, double str, double rot) {
+		double a = str - (rot * (l / r));
+		double b = str + (rot * (l / r));
+		double c = fwd - (rot * (w / r));
+		double d = fwd + (rot * (w / r));
+
+		double ws1 = Math.sqrt((b * b) + (c * c));  // front_right  (CHECK THESE AGAINST OUR BOT)
+		double ws2 = Math.sqrt((b * b) + (d * d));  // front_left
+		double ws3 = Math.sqrt((a * a) + (d * d));	// rear_left
+		double ws4 = Math.sqrt((a * a) + (c * c)); 	// rear_right
+
+		double wa1 = Math.atan2(b, c) * 180 / Math.PI;
+		double wa2 = Math.atan2(b, d) * 180 / Math.PI;
+		double wa3 = Math.atan2(a, d) * 180 / Math.PI;
+		double wa4 = Math.atan2(a, c) * 180 / Math.PI;
+
+		double max = ws1;
+		max = Math.max(max, ws2);
+		max = Math.max(max, ws3);
+		max = Math.max(max, ws4);
+		if (max > 1) {
+			ws1 /= max;
+			ws2 /= max;
+			ws3 /= max;
+			ws4 /= max;
+		}
+		
+		
+		if(Math.abs(wa1) > 90){
+			if(wa1 < 0){
+				wa1 += 180;
+				wa2 += 180;
+				wa3 += 180;
+				wa4 += 180;
+			}else{
+				wa1 -= 180;
+				wa2 -= 180;
+				wa3 -= 180;
+				wa4 -= 180;
+			}
+			ws1 = -ws1;
+			ws2 = -ws2;
+			ws3 = -ws3;
+			ws4 = -ws4;
+			
+		}
+		
+		SmartDashboard.putNumber("swerve a", a);
+		SmartDashboard.putNumber("swerve b", b);
+		SmartDashboard.putNumber("swerve c", c);
+		SmartDashboard.putNumber("swerve d", d);
+		SmartDashboard.putNumber("swerve wa1", wa1);
+		SmartDashboard.putNumber("swerve wa2", wa2);
+		SmartDashboard.putNumber("swerve wa3", wa3);
+		SmartDashboard.putNumber("swerve wa4", wa4);
+		
+		SmartDashboard.putNumber("swerve ws1", ws1);
+		SmartDashboard.putNumber("swerve ws2", ws2);
+		SmartDashboard.putNumber("swerve ws3", ws3);
+		SmartDashboard.putNumber("swerve ws4", ws4);
 		
 		DriveTrain.setDrivePower(ws4, ws2, ws1, ws3);
 		DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),
