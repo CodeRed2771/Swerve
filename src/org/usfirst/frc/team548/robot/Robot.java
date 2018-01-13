@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
-    	    	
+
     	switch(autoSelected){
     	    case autoCalibrateDrive:
         		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
@@ -55,14 +55,13 @@ public class Robot extends IterativeRobot {
     	    	return;
     	}
 
-    	
+    	DriveTrain.setAllTurnOrientiation(0);
     	driveAuto.reset();
     	mAutoProgram.start();
     }
     
     public void autonomousPeriodic() {
     	if (mAutoProgram != null) {
-    	    DriveTrain.setAllTurnOrientiation(0);
         	mAutoProgram.tick();
             driveAuto.tick();
             driveAuto.showEncoderValues();
@@ -71,6 +70,7 @@ public class Robot extends IterativeRobot {
     
     public void disabledInit() {
     	DriveTrain.resetOffSet();
+    	DriveTrain.resetDriveEncoders();
     }
     
     public void disabledPeriodic() {
@@ -80,6 +80,11 @@ public class Robot extends IterativeRobot {
     	DriveTrain.disablePID();
     }
   
+    @Override
+    public void teleopInit() {
+    	driveAuto.disable();
+    }
+    
     public void teleopPeriodic() {    	
     	DriveTrain.fieldCentricDrive(xbox.getLeftStickYAxis(), -xbox.getLeftStickXAxis(), powTwoThing(xbox.getRightStickXAxis()));
     	//DriveTrain.pidDrive(xbox.getLeftStickYAxis(), xbox.getLeftStickXAxis(), changeAngle(xbox.getRightStickXAxis(), xbox.getRightStickYAxis()));

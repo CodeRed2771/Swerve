@@ -76,17 +76,16 @@ public class Module {
 	public int getDriveEnc() {
 		return drive.getSelectedSensorPosition(0);
 	}
-	/**
-	 * Lets reset the turn encoder position to 0
-	 */
-//	public void restTurnEnc() {
-//		// this.turn.setEncPosition(0); 
-//		this.turn.getSensorCollection().setQuadraturePosition(0,500); // I DON'T THINK THIS IS RIGHT
-//	}
 
+	public void resetTurnEnc() {
+		this.turn.getSensorCollection().setQuadraturePosition(0,500); 
+	}
+
+	public void resetDriveEnc() {
+		this.drive.getSensorCollection().setQuadraturePosition(0, 0);
+	}
 	
 	public void setEncPos(int d) {
-		//turn.setEncPosition(d);
 		turn.getSensorCollection().setQuadraturePosition(d, 500);
 	}
 	

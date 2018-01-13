@@ -25,13 +25,13 @@ public class DriveAuto {
     	this.gyro = DriveTrain.getgyro();
     	PIDSourceFilter pidInputForDrive; 
 
-    	pidInputForDrive = new PIDSourceFilter((double value) -> -(DriveTrain.getDriveEnc()));
+    	pidInputForDrive = new PIDSourceFilter((double value) -> (DriveTrain.getDriveEnc()));
     	
     	SmartDashboard.putNumber("PID Get", pidInputForDrive.pidGet());
     	
 //       drivePID = new PIDControllerAIAO(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
 //       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
-       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(-speed));
+       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
        rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot));
 
        drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
@@ -40,6 +40,7 @@ public class DriveAuto {
        //rotDrivePID.setToleranceBuffer(3);        
        //drivePID.setToleranceBuffer(3); 
        
+       // These are applied to the PID in the tick method
        SmartDashboard.putNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P);
        SmartDashboard.putNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I);
        SmartDashboard.putNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D);
@@ -61,6 +62,7 @@ public class DriveAuto {
         		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
 
         drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
+        
     }
     
     public void driveInches(double inches, double angle,  double maxPower) {
@@ -68,13 +70,14 @@ public class DriveAuto {
     }
 
     public void reset() {
+    	DriveTrain.resetDriveEncoders();
     	drivePID.reset();
     	drivePID.setSetpoint(0);
     	rotDrivePID.reset();
     	rotDrivePID.setSetpoint(0);
     	gyro.reset();
      	drivePID.enable();
-    	rotDrivePID.enable();
+    	//rotDrivePID.enable();
     }
     
     public void stop() {
@@ -119,7 +122,7 @@ public class DriveAuto {
 
         rotDrivePID.setPID(SmartDashboard.getNumber("ROT P",Calibration.AUTO_ROT_P), SmartDashboard.getNumber("ROT I", Calibration.AUTO_ROT_I), SmartDashboard.getNumber("ROT D", Calibration.AUTO_ROT_D));
         drivePID.setPID(SmartDashboard.getNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P), SmartDashboard.getNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I), SmartDashboard.getNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D));
-       // drivePID.setSetpoint(SmartDashboard.getNumber("AUTO SETPOINT", 0));
+
     }
 
     private void setPowerOutput(double powerLevel) {
@@ -137,7 +140,7 @@ public class DriveAuto {
     }
 
     public boolean hasArrived() {
-        return drivePID.onTarget() && rotDrivePID.onTarget();
+        return drivePID.onTarget() ;//&& rotDrivePID.onTarget();
     }
 
     public boolean turnCompleted() {
@@ -154,6 +157,9 @@ public class DriveAuto {
         }
     }
 
+    public void disable() {
+    	setPIDstate (false);
+    }
     private int convertToTicks(double inches) {
         return (int) (inches * Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);
     }

@@ -124,12 +124,12 @@ public class DriveTrain implements PIDOutput {
 		return moduleD.isTurnEncConnected();
 	}
 
-//	public static void resetAllEnc() {
-//		moduleA.restTurnEnc();
-//		moduleB.restTurnEnc();
-//		moduleC.restTurnEnc();
-//		moduleD.restTurnEnc();
-//	}
+	public static void resetDriveEncoders() {
+		moduleA.resetDriveEnc();
+		moduleB.resetDriveEnc();
+		moduleC.resetDriveEnc();
+		moduleD.resetDriveEnc();
+	}
 
 	public static void stopDrive() {
 		moduleA.stopDrive();
@@ -323,8 +323,7 @@ public class DriveTrain implements PIDOutput {
 		SmartDashboard.putNumber("swerve ws4", ws4);
 		
 		DriveTrain.setDrivePower(ws4, ws2, ws1, ws3);
-		DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),
-				angleToLoc(wa1), angleToLoc(wa3));
+		//DriveTrain.setTurnOrientation(angleToLoc(wa4), angleToLoc(wa2),				angleToLoc(wa1), angleToLoc(wa3));
 	}
 
 	public static void humanDrive(double fwd, double str, double rot) {
