@@ -1,8 +1,10 @@
 
 package org.usfirst.frc.team548.robot;
 
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,48 +18,61 @@ public class Robot extends IterativeRobot {
 	DriveAuto driveAuto;
 	SendableChooser autoChooser;
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
+	final String calibrateSwerveModules = "Calibrate Swerve Modules";
+	final String deleteSwerveCalibration = "Delete Swerve Calibration";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
-	
     public void robotInit() {
-      xbox = new XboxController(Calibration.XBOX_PORT);
-      DriveTrain.getInstance();
-      dt = DriverStation.getInstance();
-      
-      driveAuto = new DriveAuto();
-      autoChooser = new SendableChooser();
-      autoChooser.addDefault(autoCalibrateDrive, autoCalibrateDrive);
-      
-      SmartDashboard.putData("Auto choices", autoChooser);
+    	xbox = new XboxController(Calibration.XBOX_PORT);
+    	DriveTrain.getInstance();
+    	dt = DriverStation.getInstance();
+      	Calibration.loadSwerveCalibration();
+  	  
+      	driveAuto = new DriveAuto();
+      	autoChooser = new SendableChooser();
+      	autoChooser.addDefault(autoCalibrateDrive, autoCalibrateDrive);
+      	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
+      	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
+      	
+      	SmartDashboard.putData("Auto choices", autoChooser);
     }
     
     public void autonomousInit() {
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
-    	
+    	    	
+    	switch(autoSelected){
+    	    case autoCalibrateDrive:
+        		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
+        		break;
+    	    case calibrateSwerveModules:
+    	    	double[] pos = DriveTrain.getAllTurnOrientations();
+    	    	Calibration.saveSwerveCalibration(pos[0], pos[1], pos[2], pos[3]);
+    	    	return;
+    	    case deleteSwerveCalibration:
+    	    	Calibration.resetSwerveDriveCalibration();
+    	    	return;
+    	}
+
     	
     	driveAuto.reset();
-    	
-//    	switch(autoSelected){
-//    	case autoCalibrateDrive:
-    		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
-    		
-//    	}
-    	
     	mAutoProgram.start();
     }
     
     public void autonomousPeriodic() {
-    	DriveTrain.setAllTurnOrientiation(0);
-    	mAutoProgram.tick();
-    	driveAuto.tick();
-		driveAuto.showEncoderValues();
+    	if (mAutoProgram != null) {
+    	    DriveTrain.setAllTurnOrientiation(0);
+        	mAutoProgram.tick();
+            driveAuto.tick();
+            driveAuto.showEncoderValues();
+    	}
     }
     
     public void disabledInit() {
     	DriveTrain.resetOffSet();
     }
+    
     public void disabledPeriodic() {
     	DriveTrain.setOffSets();
     	xbox.setRightRumble(0);
@@ -83,8 +98,13 @@ public class Robot extends IterativeRobot {
     	xbox.setLeftRumble((dt.isBrownedOut() ? 1 : 0));
     }
     
+    public void testInit() {
+		double[] orientations = DriveTrain.getInstance().getAllTurnOrientations();
+		Calibration.saveSwerveCalibration(orientations[0], orientations[1], orientations[2], orientations[3]);
+    }
+    
     public void testPeriodic() {
-    	LiveWindow.addSensor("DriveSystem", "Hyro", DriveTrain.getgyro());
+//    	LiveWindow.addSensor("DriveSystem", "Hyro", DriveTrain.getgyro());
     }
     
     

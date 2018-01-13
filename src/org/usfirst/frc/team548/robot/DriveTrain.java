@@ -167,10 +167,10 @@ public class DriveTrain implements PIDOutput {
 //			System.out.println("BSoff: " + modDOff);
 
 //			resetAllEnc(); removed 1/8/18
-			moduleA.setEncPos((int) (locSub(modAOff, Calibration.DT_A_ABS_ZERO) * 4095d));
-			moduleB.setEncPos((int) (locSub(modBOff, Calibration.DT_B_ABS_ZERO) * 4095d));
-			moduleC.setEncPos((int) (locSub(modCOff, Calibration.DT_C_ABS_ZERO) * 4095d));
-			moduleD.setEncPos((int) (locSub(modDOff, Calibration.DT_D_ABS_ZERO) * 4095d));
+			moduleA.setEncPos((int) (locSub(modAOff, Calibration.GET_DT_A_ABS_ZERO()) * 4095d));
+			moduleB.setEncPos((int) (locSub(modBOff, Calibration.GET_DT_B_ABS_ZERO()) * 4095d));
+			moduleC.setEncPos((int) (locSub(modCOff, Calibration.GET_DT_C_ABS_ZERO()) * 4095d));
+			moduleD.setEncPos((int) (locSub(modDOff, Calibration.GET_DT_D_ABS_ZERO()) * 4095d));
 			offSetSet = true;
 		}
 	}
@@ -396,6 +396,11 @@ public class DriveTrain implements PIDOutput {
 
 	public static void disablePID() {
 		pidControllerRot.disable();
+	}
+	
+	public static double[] getAllTurnOrientations() {
+		return new double[] {moduleA.getTurnOrientation(), moduleB.getTurnOrientation(),
+				moduleC.getTurnOrientation(), moduleD.getTurnOrientation()};
 	}
 
 	private static volatile double pidFWD = 0, pidSTR = 0;

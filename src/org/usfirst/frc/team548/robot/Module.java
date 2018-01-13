@@ -89,6 +89,7 @@ public class Module {
 		//turn.setEncPosition(d);
 		turn.getSensorCollection().setQuadraturePosition(d, 500);
 	}
+	
 	/**
 	 * Is electrical good? Probably not.... Is the turn encoder connected?
 	 * @return true if the encoder is connected
