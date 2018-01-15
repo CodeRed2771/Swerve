@@ -21,33 +21,34 @@ public class DriveAuto {
     private double curPowerSetting = 1;
     
     public DriveAuto() {
-    	DriveTrain.getInstance();
-    	this.gyro = DriveTrain.getgyro();
-    	PIDSourceFilter pidInputForDrive; 
-
-    	pidInputForDrive = new PIDSourceFilter((double value) -> (DriveTrain.getDriveEnc()));
-    	
-    	SmartDashboard.putNumber("PID Get", pidInputForDrive.pidGet());
-    	
-//       drivePID = new PIDControllerAIAO(0, 0, 0, pidInputForDrive, speed -> DriveTrain.autoSetDrive(speed), false, "autodrive");
-//       rotDrivePID = new PIDControllerAIAO(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot), false, "autorot (gyro)");
-       drivePID = new PIDController(0, 0, 0, pidInputForDrive, speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
-       rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, gyro, rot -> DriveTrain.autoSetRot(rot));
-
-       drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
-       rotDrivePID.setAbsoluteTolerance(1.5);  // degrees off 
-       
-       //rotDrivePID.setToleranceBuffer(3);        
-       //drivePID.setToleranceBuffer(3); 
-       
-       // These are applied to the PID in the tick method
-       SmartDashboard.putNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P);
-       SmartDashboard.putNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I);
-       SmartDashboard.putNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D);
-       
-       drivePID.setSetpoint(0);
-       drivePID.reset();    
-       
+		DriveTrain.getInstance();
+		
+		this.gyro = DriveTrain.getgyro();
+		
+		PIDSourceFilter pidInputForDrive; 
+		
+		pidInputForDrive = new PIDSourceFilter((double value) -> (DriveTrain.getDriveEnc()));
+		
+		drivePID = new PIDController(Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, 
+			   pidInputForDrive, 
+			   speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
+		rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, 
+			   gyro, 
+			   rot -> DriveTrain.autoSetRot(rot));
+		
+		drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
+		rotDrivePID.setAbsoluteTolerance(1.5);  // degrees off 
+		   
+	   //rotDrivePID.setToleranceBuffer(3);        
+	   //drivePID.setToleranceBuffer(3); 
+	   
+	    // These are applied to the PID in the tick method
+		SmartDashboard.putNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P);
+		SmartDashboard.putNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I);
+		SmartDashboard.putNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D);
+	   
+		drivePID.setSetpoint(0);
+		drivePID.reset();    	   
     }
     
 	public void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
@@ -120,6 +121,8 @@ public class DriveAuto {
         
         SmartDashboard.putNumber("CurPower", curPowerSetting);
 
+        // Sets the PID values based on input from the SmartDashboard
+        // This is only needed during tuning
         rotDrivePID.setPID(SmartDashboard.getNumber("ROT P",Calibration.AUTO_ROT_P), SmartDashboard.getNumber("ROT I", Calibration.AUTO_ROT_I), SmartDashboard.getNumber("ROT D", Calibration.AUTO_ROT_D));
         drivePID.setPID(SmartDashboard.getNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P), SmartDashboard.getNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I), SmartDashboard.getNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D));
 
