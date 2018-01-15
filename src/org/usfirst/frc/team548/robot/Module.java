@@ -117,23 +117,23 @@ public class Module {
 	 * Set turn to pos from 0 to 1 using PID
 	 * @param setLoc orientation to set to
 	 */	
-	public void setTurnOrientation(double loc) {
+	public void setTurnOrientation(double position) {
 		//turn.changeControlMode(TalonControlMode.Position);
 		double base = getTurnRotations() * FULL_ROTATION;
 		if (getTurnEncPos() >= 0) {
-			if ((base + (loc * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
+			if ((base + (position * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
 				base += FULL_ROTATION;
-			} else if ((base + (loc * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
+			} else if ((base + (position * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
-			turn.set(ControlMode.Position, (((loc * FULL_ROTATION) + (base))));
+			turn.set(ControlMode.Position, (((position * FULL_ROTATION) + (base))));
 		} else {
-			if ((base - ((1-loc) * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
+			if ((base - ((1-position) * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
 				base += FULL_ROTATION;
-			} else if ((base -((1-loc) * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
+			} else if ((base -((1-position) * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
-			turn.set(ControlMode.Position, (base- (((1-loc) * FULL_ROTATION))));	
+			turn.set(ControlMode.Position, (base- (((1-position) * FULL_ROTATION))));	
 		}
 	}
 	
