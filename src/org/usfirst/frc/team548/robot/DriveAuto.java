@@ -1,6 +1,9 @@
 package org.usfirst.frc.team548.robot;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.coderedrobotics.libs.PIDSourceFilter;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -196,7 +199,7 @@ public class DriveAuto {
     }
     
     private Double round2(Double val) { 
-    	return val;
-    	//new BigDecimal(val.toString()).setScale(2,RoundingMode.HALF_UP).doubleValue(); 
+    	// added this back in on 1/15/18
+    	return new BigDecimal(val.toString()).setScale(2,RoundingMode.HALF_UP).doubleValue(); 
     	}
 }
