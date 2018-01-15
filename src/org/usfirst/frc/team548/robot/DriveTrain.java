@@ -59,20 +59,20 @@ public class DriveTrain implements PIDOutput {
 		return gyro;
 	}
 
-	public static void setDrivePower(double bbPower, double bhPower,
-			double bgPower, double bsPower) {
-		moduleA.setDrivePower(bbPower);
-		moduleB.setDrivePower(bhPower);
-		moduleC.setDrivePower(bgPower);
-		moduleD.setDrivePower(bsPower);
+	public static void setDrivePower(double modAPower, double modBPower,
+			double modCPower, double modDPower) {
+		moduleA.setDrivePower(modAPower);
+		moduleB.setDrivePower(modBPower);
+		moduleC.setDrivePower(modCPower);
+		moduleD.setDrivePower(modDPower);
 	}
 
-	public static void setTurnPower(double bbPower, double bhPower,
-			double bgPower, double bsPower) {
-		moduleA.setTurnPower(bbPower);
-		moduleB.setTurnPower(bhPower);
-		moduleC.setTurnPower(bgPower);
-		moduleD.setTurnPower(bsPower);
+	public static void setTurnPower(double modAPower, double modBPower,
+			double modCPower, double modDPower) {
+		moduleA.setTurnPower(modAPower);
+		moduleB.setTurnPower(modBPower);
+		moduleC.setTurnPower(modCPower);
+		moduleD.setTurnPower(modDPower);
 	}
 
 	public static void setTurnOrientation(double modALoc, double modBLoc, double modCLoc,
