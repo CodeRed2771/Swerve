@@ -65,6 +65,7 @@ public class Robot extends IterativeRobot {
         	mAutoProgram.tick();
             driveAuto.tick();
             driveAuto.showEncoderValues();
+            
     	}
     }
     
