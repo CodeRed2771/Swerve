@@ -64,9 +64,9 @@ public class DriveAuto {
         
         DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle),
         		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
-
+        rotDrivePID.disable();
         drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
-        
+        drivePID.enable();
     }
     
     public void driveInches(double inches, double angle,  double maxPower) {
@@ -81,7 +81,7 @@ public class DriveAuto {
     	rotDrivePID.setSetpoint(0);
     	gyro.reset();
      	drivePID.enable();
-    	//rotDrivePID.enable();
+    	
     }
     
     public void stop() {
@@ -97,9 +97,9 @@ public class DriveAuto {
     	
     	maxPowerAllowed = maxPower;
        	curPowerSetting = .18;
-            	
+        drivePID.disable();
         rotDrivePID.setSetpoint(rotDrivePID.getSetpoint() + degrees);
-        
+        rotDrivePID.enable();
         setPowerOutput(curPowerSetting);
     }
 

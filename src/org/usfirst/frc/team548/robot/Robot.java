@@ -20,6 +20,7 @@ public class Robot extends IterativeRobot {
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
+	final String autoSwitch = "Auto Switch";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
@@ -31,9 +32,10 @@ public class Robot extends IterativeRobot {
   	  
       	driveAuto = new DriveAuto();
       	autoChooser = new SendableChooser();
-      	autoChooser.addDefault(autoCalibrateDrive, autoCalibrateDrive);
+      	autoChooser.addDefault(autoSwitch, autoSwitch);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
       	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
+      	//autoChooser.addObject(autoSwitch, autoSwitch);
       	
       	SmartDashboard.putData("Auto choices", autoChooser);
     }
@@ -53,7 +55,11 @@ public class Robot extends IterativeRobot {
     	    case deleteSwerveCalibration:
     	    	Calibration.resetSwerveDriveCalibration();
     	    	return;
-    	}
+    	    case autoSwitch:
+    	    	mAutoProgram = new AutoSwitch(driveAuto, 1);
+        		break;
+    	} 
+    	//mAutoProgram = new AutoSwitch(driveAuto, 1);
 
     	DriveTrain.setAllTurnOrientiation(0);
     	driveAuto.reset();
