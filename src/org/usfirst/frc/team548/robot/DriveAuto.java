@@ -102,6 +102,23 @@ public class DriveAuto {
         rotDrivePID.enable();
         setPowerOutput(curPowerSetting);
     }
+    
+    public void continuousTurn(double degrees, double maxPower) {
+    	 drivePID.disable();
+         rotDrivePID.setSetpoint(gyro.getAngle() + degrees);
+         rotDrivePID.enable();
+         setPowerOutput(maxPower);
+    }
+    
+    public void continuousDrive(double inches, double maxPower) {
+    	   setPowerOutput(maxPower);
+           
+           DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(0), DriveTrain.angleToLoc(0),
+           		DriveTrain.angleToLoc(0), DriveTrain.angleToLoc(0));
+           rotDrivePID.disable();
+           drivePID.setSetpoint(DriveTrain.getDriveEnc()+ convertToTicks(inches));
+           drivePID.enable();
+   }
 
     public void tick() {
     	// this is called roughly 50 times per second
