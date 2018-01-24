@@ -16,12 +16,13 @@ public class Robot extends IterativeRobot {
 	
 	//---AUTO IMPORTS---
 	DriveAuto driveAuto;
-	SendableChooser autoChooser;
+	SendableChooser<String> autoChooser;
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
 	final String autoSwitch = "Auto Switch";
 	final String autoCubeFollow = "Auto Cube Follow";
+	final String autoBaseLine = "Auto Base Line";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
@@ -32,12 +33,12 @@ public class Robot extends IterativeRobot {
       	Calibration.loadSwerveCalibration();
   	  
       	driveAuto = new DriveAuto();
-      	autoChooser = new SendableChooser();
-      	autoChooser.addDefault(autoCubeFollow, autoCubeFollow);
+      	autoChooser = new SendableChooser<String>();
+      	autoChooser.addDefault(autoBaseLine, autoBaseLine);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
       	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
-      	//autoChooser.addObject(autoSwitch, autoSwitch);
+      	autoChooser.addObject(autoSwitch, autoSwitch);
       	
       	SmartDashboard.putData("Auto choices", autoChooser);
     }
@@ -53,18 +54,20 @@ public class Robot extends IterativeRobot {
     	    case calibrateSwerveModules:
     	    	double[] pos = DriveTrain.getAllTurnOrientations();
     	    	Calibration.saveSwerveCalibration(pos[0], pos[1], pos[2], pos[3]);
-    	    	return;
+    	    	break;
     	    case deleteSwerveCalibration:
     	    	Calibration.resetSwerveDriveCalibration();
-    	    	return;
+    	    	break;
     	    case autoSwitch:
     	    	mAutoProgram = new AutoSwitch(driveAuto, 1);
         		break;
     	    case autoCubeFollow:
     	    	mAutoProgram = new AutoCubeFollow(driveAuto, 1);
     	    	break;
+    	    case autoBaseLine:
+    	    	mAutoProgram = new AutoBaseLine(driveAuto, 1);
+    	    	break;
     	} 
-    	//mAutoProgram = new AutoSwitch(driveAuto, 1);
 
     	DriveTrain.setAllTurnOrientiation(0);
     	driveAuto.reset();

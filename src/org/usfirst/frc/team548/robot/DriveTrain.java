@@ -1,12 +1,5 @@
 package org.usfirst.frc.team548.robot;
 
-
-// DVV - I feel like the code in fieldCentricDrive is wrong in how it's using radians instead of just angle
-//       or is that the same? Accordign to the white paper, the value used in the sin/cos functions should
-//		 be "the gyro angle".  What is that?  I would assume that if we're turned a quarter turn, the gyro
-//		 angle would be "90".  If so, we need to determine if we should be using a full 360, or 0-180,and -180 to 0.
-//
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PIDController;
