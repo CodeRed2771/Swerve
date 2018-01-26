@@ -19,28 +19,28 @@ public final static int XBOX_PORT = 0;
 //Physical Module - A
 	public final static int DT_A_DRIVE_TALON_ID = 1;
 	public final static int DT_A_TURN_TALON_ID = 2;
-	private final static double DT_A_ABS_ZERO_INITIAL = .6612;
+	private final static double DT_A_ABS_ZERO_INITIAL = .6636;
 	private static double DT_A_ABS_ZERO = DT_A_ABS_ZERO_INITIAL;
 	public static double GET_DT_A_ABS_ZERO() { return DT_A_ABS_ZERO; }
 	
 	// Physical Module - B
 	public final static int DT_B_DRIVE_TALON_ID = 5;
 	public final static int DT_B_TURN_TALON_ID = 6;
-	private final static double DT_B_ABS_ZERO_INITIAL = .2164;
+	private final static double DT_B_ABS_ZERO_INITIAL = .2155;
 	private static double DT_B_ABS_ZERO = DT_B_ABS_ZERO_INITIAL;
 	public static double GET_DT_B_ABS_ZERO() { return DT_B_ABS_ZERO; }
 	
 	// Physical Module - C
 	public final static int DT_C_DRIVE_TALON_ID = 3;
 	public final static int DT_C_TURN_TALON_ID = 4;
-	private final static double DT_C_ABS_ZERO_INITIAL = .060;
+	private final static double DT_C_ABS_ZERO_INITIAL = .044;
 	private static double DT_C_ABS_ZERO = DT_C_ABS_ZERO_INITIAL;
 	public static double GET_DT_C_ABS_ZERO() { return DT_C_ABS_ZERO; }
 	
 	// Physical Module - D
 	public final static int DT_D_DRIVE_TALON_ID = 7;
 	public final static int DT_D_TURN_TALON_ID = 8;
-	private final static double DT_D_ABS_ZERO_INITIAL = 0.6200;
+	private final static double DT_D_ABS_ZERO_INITIAL = 0.6167;
 	private static double DT_D_ABS_ZERO = DT_D_ABS_ZERO_INITIAL;
 	public static double GET_DT_D_ABS_ZERO() { return DT_D_ABS_ZERO; }
 	
@@ -51,7 +51,7 @@ public final static int XBOX_PORT = 0;
 	public final static double DT_ROT_PID_D= .000;
 	public final static double DT_ROT_PID_IZONE = 18;
 
-	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 25.93;
+	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 28.81;
 	
 	public static final double AUTO_ROT_P = 0.03; // increased from .022 on 3/20/17 dvv
 	public static final double AUTO_ROT_I = 0;

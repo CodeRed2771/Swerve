@@ -37,6 +37,7 @@ public class Robot extends IterativeRobot {
       	autoChooser.addDefault(autoBaseLine, autoBaseLine);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
       	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
+      	autoChooser.addObject(autoCalibrateDrive, autoCalibrateDrive);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
       	autoChooser.addObject(autoSwitch, autoSwitch);
       	
