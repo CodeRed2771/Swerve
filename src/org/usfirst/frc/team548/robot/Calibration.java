@@ -45,8 +45,8 @@ public final static int XBOX_PORT = 0;
 	public static double GET_DT_D_ABS_ZERO() { return DT_D_ABS_ZERO; }
 	
 	
-	//Rot PID .01, 0.0001, 0.008,
-	public final static double DT_ROT_PID_P = .7; // orig .007
+	//Rot PID - this is for turning the robot, not turning a module
+	public final static double DT_ROT_PID_P = .007; 
 	public final static double DT_ROT_PID_I =.0004;
 	public final static double DT_ROT_PID_D= .000;
 	public final static double DT_ROT_PID_IZONE = 18;
@@ -67,10 +67,10 @@ public final static int XBOX_PORT = 0;
 		if (calibrationFile.exists()) {
 			try {
 				BufferedReader reader = new BufferedReader(new FileReader(calibrationFile));
-				Calibration.DT_A_ABS_ZERO = Double.parseDouble(reader.readLine());
-				Calibration.DT_B_ABS_ZERO = Double.parseDouble(reader.readLine());
-				Calibration.DT_C_ABS_ZERO = Double.parseDouble(reader.readLine());
-				Calibration.DT_D_ABS_ZERO = Double.parseDouble(reader.readLine());
+				DT_A_ABS_ZERO = Double.parseDouble(reader.readLine());
+				DT_B_ABS_ZERO = Double.parseDouble(reader.readLine());
+				DT_C_ABS_ZERO = Double.parseDouble(reader.readLine());
+				DT_D_ABS_ZERO = Double.parseDouble(reader.readLine());
 				reader.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
