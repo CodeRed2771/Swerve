@@ -94,8 +94,6 @@ public class Robot extends IterativeRobot {
     
     public void disabledPeriodic() {
     	DriveTrain.setOffSets();
-    	xbox.setRightRumble(0);
-    	xbox.setLeftRumble(0);
     	DriveTrain.disablePID();
     }
   
@@ -106,9 +104,6 @@ public class Robot extends IterativeRobot {
     
     public void teleopPeriodic() {    	
     	DriveTrain.fieldCentricDrive(xbox.getLeftStickYAxis(), -xbox.getLeftStickXAxis(), powTwoThing(xbox.getRightStickXAxis()));
-    	//DriveTrain.pidDrive(xbox.getLeftStickYAxis(), xbox.getLeftStickXAxis(), changeAngle(xbox.getRightStickXAxis(), xbox.getRightStickYAxis()));
-    	// DriveTrain.tankDrive(xbox.getLeftStickYAxis(), xbox.getRightStickYAxis());
-    	//DriveTrain.humanDrive(xbox.getLeftStickYAxis(), xbox.getLeftStickXAxis(), Math.pow(xbox.getRightStickXAxis(), 3));
     	
     	SmartDashboard.putBoolean("Mod A Turn Encoder", DriveTrain.isModuleATurnEncConnected());
     	SmartDashboard.putBoolean("Mod B Turn Encoder", DriveTrain.isModuleBTurnEncConnected());
@@ -118,8 +113,6 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Gyro radians",  DriveTrain.getGyroAngleInRad());
     	SmartDashboard.putNumber("Avg. Error", DriveTrain.getAverageError());
     	
-    	xbox.setRightRumble(Math.pow(DriveTrain.getAverageError()/1300d, 2));
-    	xbox.setLeftRumble((dt.isBrownedOut() ? 1 : 0));
     }
     
     public void testInit() {

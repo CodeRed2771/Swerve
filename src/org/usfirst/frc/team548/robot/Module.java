@@ -43,8 +43,6 @@ public class Module {
 	 */
 	public void setTurnPower(double p) {
 		this.turn.set(ControlMode.PercentOutput, p); 
-		//this.turn.changeControlMode(TalonControlMode.PercentVbus); // 'Vbus' is short for 'Van V. Party Bus(woo woo!)'
-		//this.turn.set(p);
 	}
 
 	/**
@@ -60,7 +58,6 @@ public class Module {
 	 * @return turn encoder position
 	 */
 	public double getTurnEncPos() {
-		//return turn.getEncPosition();
 		return turn.getSelectedSensorPosition(0);
 	}
 
@@ -69,7 +66,6 @@ public class Module {
 	 * @return
 	 */
 	public double getAbsPos() {
-		// return (turn.getPulseWidthPosition() & 0xFFF)/4095d;
 		return (turn.getSensorCollection().getPulseWidthPosition() & 0xFFF)/4095d;
 	}
 
@@ -103,13 +99,10 @@ public class Module {
 	}
 	
 	public double getTurnOrientation() {
-		//return (turn.getEncPosition() % FULL_ROTATION) / FULL_ROTATION;
 		return (turn.getSelectedSensorPosition(0) % FULL_ROTATION) / FULL_ROTATION;
 	}
 	
 	public void setTurnPIDToSetPoint(double setpoint) {
-		//turn.changeControlMode(ControlMode.Position);
-		//turn.set(setpoint);
 		turn.set(ControlMode.Position, setpoint);
 	}
 	
@@ -118,7 +111,6 @@ public class Module {
 	 * @param setLoc orientation to set to
 	 */	
 	public void setTurnOrientation(double position) {
-		//turn.changeControlMode(TalonControlMode.Position);
 		double base = getTurnRotations() * FULL_ROTATION;
 		if (getTurnEncPos() >= 0) {
 			if ((base + (position * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
@@ -152,7 +144,6 @@ public class Module {
 	}
 	
 	public void setBrakeMode(boolean b) {
-		//drive.enableBrakeMode(b);
 		drive.setNeutralMode(b ? NeutralMode.Brake : NeutralMode.Coast);
 	}
 	

@@ -81,7 +81,6 @@ public class DriveTrain implements PIDOutput {
 	}
 	
 	public static void autoSetRot(double rot) {
-		System.out.println("autoSetRot " + rot);
 		swerveDrive(0,0,rot);
 	}
 
