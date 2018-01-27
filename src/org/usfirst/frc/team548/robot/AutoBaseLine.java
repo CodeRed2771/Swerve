@@ -9,7 +9,8 @@ public class AutoBaseLine extends AutoBaseClass{
 	
 	public void tick(){
 		if(isRunning()){
-			this.driveAuto().showEncoderValues();
+			
+			driveAuto().showEncoderValues();
 			SmartDashboard.putNumber("Auto Step", getCurrentStep());
 			
 			switch(getCurrentStep()){
@@ -21,6 +22,26 @@ public class AutoBaseLine extends AutoBaseClass{
 				if(driveAuto().hasArrived())
 					advanceStep();
 				break;
+			case 2:
+				setTimerAndAdvanceStep(3000);
+				break;	
+			case 3:
+				break;
+			case 4:
+				setTimerAndAdvanceStep(2000);
+				driveInches(-60, 0, .5);
+				break;	
+			case 5:
+				if(driveAuto().hasArrived())
+					advanceStep();
+				break;
+			case 6:
+				setTimerAndAdvanceStep(3000);
+				break;	
+			case 7:
+				break;
+			case 8:
+				setStep(0);
 			}
 		}
 	}

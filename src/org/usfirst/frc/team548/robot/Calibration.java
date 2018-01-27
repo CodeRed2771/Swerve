@@ -44,20 +44,19 @@ public final static int XBOX_PORT = 0;
 	private static double DT_D_ABS_ZERO = DT_D_ABS_ZERO_INITIAL;
 	public static double GET_DT_D_ABS_ZERO() { return DT_D_ABS_ZERO; }
 	
-	
 	//Rot PID - this is for turning the robot, not turning a module
 	public final static double DT_ROT_PID_P = .007; 
 	public final static double DT_ROT_PID_I =.0004;
 	public final static double DT_ROT_PID_D= .000;
 	public final static double DT_ROT_PID_IZONE = 18;
 
-	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 28.81;
+	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 29.80;
 	
 	public static final double AUTO_ROT_P = 0.03; // increased from .022 on 3/20/17 dvv
 	public static final double AUTO_ROT_I = 0;
 	public static final double AUTO_ROT_D = 0.067;
 
-	public static final double AUTO_DRIVE_P = 0.0042;
+	public static final double AUTO_DRIVE_P = 0.008;
 	public static final double AUTO_DRIVE_I = 0.0;
 	public static final double AUTO_DRIVE_D = 0.007;
 

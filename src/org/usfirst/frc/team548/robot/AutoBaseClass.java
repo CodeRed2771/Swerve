@@ -19,7 +19,6 @@ public abstract class AutoBaseClass {
 	}
 
 	public String getGameData() {
-		String gameData;
 		return DriverStation.getInstance().getGameSpecificMessage();
 	}
 	
@@ -108,5 +107,5 @@ public abstract class AutoBaseClass {
 	public boolean timeExpired() {
 		return mAutoTimer.timeExpired();
 	}
-
+	
 }

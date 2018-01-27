@@ -17,7 +17,6 @@ public class Robot extends IterativeRobot {
 	//---AUTO IMPORTS---
 	DriveAuto driveAuto;
 	SendableChooser<String> autoChooser;
-	final String autoDVV = "Auto DVV";
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
@@ -85,7 +84,6 @@ public class Robot extends IterativeRobot {
         	mAutoProgram.tick();
             driveAuto.tick();
             driveAuto.showEncoderValues();
-            System.out.println("Periodic running mAuto");
     	}
     }
     
