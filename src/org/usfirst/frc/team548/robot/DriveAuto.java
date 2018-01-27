@@ -62,9 +62,11 @@ public class DriveAuto {
         
         setPowerOutput(curPowerSetting);
         
+        rotDrivePID.disable();
+               
         DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle),
         		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
-        rotDrivePID.disable();
+ 
         drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
         drivePID.enable();
     }
