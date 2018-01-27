@@ -6,12 +6,12 @@ public class AutoCalibrateDrive extends AutoBaseClass {
 
 	public AutoCalibrateDrive(DriveAuto driveAuto, int robotPosition) {
 		super(driveAuto, robotPosition);
+		
 	}
 
 	public void tick() {
 		
-		if (isRunning()) {
-	
+		if (isRunning()) {		
 			this.driveAuto().showEncoderValues();
 			SmartDashboard.putNumber("Auto Step", getCurrentStep());
 

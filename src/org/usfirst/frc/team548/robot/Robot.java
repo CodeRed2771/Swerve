@@ -17,6 +17,7 @@ public class Robot extends IterativeRobot {
 	//---AUTO IMPORTS---
 	DriveAuto driveAuto;
 	SendableChooser<String> autoChooser;
+	final String autoDVV = "Auto DVV";
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
@@ -47,7 +48,9 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
-
+    	
+    	mAutoProgram = null;
+    	
     	switch(autoSelected){
     	    case autoCalibrateDrive:
         		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
@@ -70,17 +73,19 @@ public class Robot extends IterativeRobot {
     	    	break;
     	} 
 
-    	DriveTrain.setAllTurnOrientiation(0);
     	driveAuto.reset();
+    	DriveTrain.setAllTurnOrientiation(0);
     	mAutoProgram.start();
+    
     }
     
     public void autonomousPeriodic() {
+    
     	if (mAutoProgram != null) {
         	mAutoProgram.tick();
             driveAuto.tick();
             driveAuto.showEncoderValues();
-            
+            System.out.println("Periodic running mAuto");
     	}
     }
     
