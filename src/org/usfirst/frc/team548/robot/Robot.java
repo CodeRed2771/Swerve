@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
 	final String autoSwitch = "Auto Switch";
 	final String autoCubeFollow = "Auto Cube Follow";
 	final String autoBaseLine = "Auto Base Line";
+	final String visionAuto = "Vision Auto";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
@@ -40,6 +41,7 @@ public class Robot extends IterativeRobot {
       	autoChooser.addObject(autoCalibrateDrive, autoCalibrateDrive);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
       	autoChooser.addObject(autoSwitch, autoSwitch);
+      	autoChooser.addObject(visionAuto, visionAuto);
       	
       	SmartDashboard.putData("Auto choices", autoChooser);
     }
@@ -70,6 +72,8 @@ public class Robot extends IterativeRobot {
     	    case autoBaseLine:
     	    	mAutoProgram = new AutoBaseLine(driveAuto, 1);
     	    	break;
+    	    case visionAuto:
+    	    	mAutoProgram = new VisionAuto(driveAuto, 1);
     	} 
 
     	driveAuto.reset();
