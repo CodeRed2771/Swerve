@@ -5,8 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class Module {
 	private WPI_TalonSRX drive, turn;
-	private final double FULL_ROTATION = 4096d, TURN_P, TURN_I, TURN_D;
-	private final int TURN_IZONE;
+	private final double FULL_ROTATION = 4096d, TURN_P, TURN_I, TURN_D, DRIVE_P, DRIVE_I, DRIVE_D;
+	private final int TURN_IZONE, DRIVE_IZONE;
 	
 	/**
 	 * Lets make a new module :)
@@ -17,9 +17,21 @@ public class Module {
 	 * @param tD I probably need to know the D constant for the turning PID
 	 * @param tIZone I might not need to know the I Zone value for the turning PID
 	 */
-	public Module(int driveTalonID, int turnTalonID, double tP, double tI, double tD, int tIZone) {
+	public Module(int driveTalonID, int turnTalonID, double dP, double dI, double dD, int dIZone, double tP, double tI, double tD, int tIZone) {
 		drive = new WPI_TalonSRX(driveTalonID);
+		drive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0); // ?? don't know if zeros are right
+		DRIVE_P = dP;
+		DRIVE_I = dI;
+		DRIVE_D = dD;
+		DRIVE_IZONE = dIZone;
 
+		drive.config_kP(0,  DRIVE_P, 500);
+		drive.config_kI(0,  DRIVE_I, 500);
+		drive.config_kD(0,  DRIVE_D, 500);
+		drive.config_IntegralZone(0, DRIVE_IZONE, 500);
+		drive.selectProfileSlot(0, 0);
+		
+		
 		turn = new WPI_TalonSRX(turnTalonID);
 	
 		turn.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,0,0); // ?? don't know if zeros are right
@@ -27,14 +39,12 @@ public class Module {
 		TURN_I = tI;
 		TURN_D = tD;
 		TURN_IZONE = tIZone;
-		// turn.reverseOutput(false); seemed unnecessary
-		//turn.setPID(TURN_P, TURN_I, TURN_D);
+
 		turn.config_kP(0,  TURN_P, 500);
 		turn.config_kI(0,  TURN_I, 500);
 		turn.config_kD(0,  TURN_D, 500);
 		turn.config_IntegralZone(0, TURN_IZONE, 500);
 		turn.selectProfileSlot(0, 0);
-		//turn.setIZone(TURN_IZONE); not sure what to replace this with 1/8
 	}
 	
 	/**
@@ -100,6 +110,10 @@ public class Module {
 	
 	public double getTurnOrientation() {
 		return (turn.getSelectedSensorPosition(0) % FULL_ROTATION) / FULL_ROTATION;
+	}
+	
+	public void setDrivePIDToSetPoint(double setpoint) {
+		drive.set(ControlMode.Position, setpoint);
 	}
 	
 	public void setTurnPIDToSetPoint(double setpoint) {

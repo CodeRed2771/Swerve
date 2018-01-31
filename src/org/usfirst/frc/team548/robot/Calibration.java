@@ -19,28 +19,28 @@ public final static int XBOX_PORT = 0;
 //Physical Module - A
 	public final static int DT_A_DRIVE_TALON_ID = 1;
 	public final static int DT_A_TURN_TALON_ID = 2;
-	private final static double DT_A_ABS_ZERO_INITIAL = .6636;
+	private final static double DT_A_ABS_ZERO_INITIAL = .66179894;
 	private static double DT_A_ABS_ZERO = DT_A_ABS_ZERO_INITIAL;
 	public static double GET_DT_A_ABS_ZERO() { return DT_A_ABS_ZERO; }
 	
 	// Physical Module - B
 	public final static int DT_B_DRIVE_TALON_ID = 5;
 	public final static int DT_B_TURN_TALON_ID = 6;
-	private final static double DT_B_ABS_ZERO_INITIAL = .2155;
+	private final static double DT_B_ABS_ZERO_INITIAL = .21225835;
 	private static double DT_B_ABS_ZERO = DT_B_ABS_ZERO_INITIAL;
 	public static double GET_DT_B_ABS_ZERO() { return DT_B_ABS_ZERO; }
 	
 	// Physical Module - C
 	public final static int DT_C_DRIVE_TALON_ID = 3;
 	public final static int DT_C_TURN_TALON_ID = 4;
-	private final static double DT_C_ABS_ZERO_INITIAL = .044;
+	private final static double DT_C_ABS_ZERO_INITIAL = .04479865;
 	private static double DT_C_ABS_ZERO = DT_C_ABS_ZERO_INITIAL;
 	public static double GET_DT_C_ABS_ZERO() { return DT_C_ABS_ZERO; }
 	
 	// Physical Module - D
 	public final static int DT_D_DRIVE_TALON_ID = 7;
 	public final static int DT_D_TURN_TALON_ID = 8;
-	private final static double DT_D_ABS_ZERO_INITIAL = 0.6167;
+	private final static double DT_D_ABS_ZERO_INITIAL = 0.61515559;
 	private static double DT_D_ABS_ZERO = DT_D_ABS_ZERO_INITIAL;
 	public static double GET_DT_D_ABS_ZERO() { return DT_D_ABS_ZERO; }
 	
@@ -56,9 +56,10 @@ public final static int XBOX_PORT = 0;
 	public static final double AUTO_ROT_I = 0;
 	public static final double AUTO_ROT_D = 0.067;
 
-	public static final double AUTO_DRIVE_P = 0.008;
+	public static final double AUTO_DRIVE_P = 10.0;
 	public static final double AUTO_DRIVE_I = 0.0;
-	public static final double AUTO_DRIVE_D = 0.007;
+	public static final double AUTO_DRIVE_D = 0.0;
+	public static final int AUTO_DRIVE_IZONE = 0;
 
 
 	public static void loadSwerveCalibration() {

@@ -27,13 +27,13 @@ public class DriveTrain implements PIDOutput {
 
 	private DriveTrain() {
 		moduleA = new Module(Calibration.DT_A_DRIVE_TALON_ID,
-				Calibration.DT_A_TURN_TALON_ID, 4.20, 0.01, 0, 200);
+				Calibration.DT_A_TURN_TALON_ID, Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, Calibration.AUTO_DRIVE_IZONE, 4.20, 0.01, 0, 200);
 		moduleB = new Module(Calibration.DT_B_DRIVE_TALON_ID,
-				Calibration.DT_B_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+				Calibration.DT_B_TURN_TALON_ID, Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, Calibration.AUTO_DRIVE_IZONE, 4.20, 0.01, 0, 200);
 		moduleC = new Module(Calibration.DT_C_DRIVE_TALON_ID,
-				Calibration.DT_C_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+				Calibration.DT_C_TURN_TALON_ID, Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, Calibration.AUTO_DRIVE_IZONE, 4.20, 0.01, 0, 200);
 		moduleD = new Module(Calibration.DT_D_DRIVE_TALON_ID,
-				Calibration.DT_D_TURN_TALON_ID, 4.20, 0.01, 0, 200); 
+				Calibration.DT_D_TURN_TALON_ID, Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, Calibration.AUTO_DRIVE_IZONE, 4.20, 0.01, 0, 200);
 																	
 		gyro = new AHRS(SerialPort.Port.kUSB);
 		
@@ -75,9 +75,20 @@ public class DriveTrain implements PIDOutput {
 		moduleC.setTurnOrientation(modCPosition);
 		moduleD.setTurnOrientation(modDPosition);
 	}
+	
+	public static void setAllDrivePosition(int position) {
+		setDrivePosition(position,position,position,position);
+	}
+	
+	public static void setDrivePosition(int modAPosition, int modBPosition, int modCPosition, int modDPosition) {
+		moduleA.setDrivePIDToSetPoint(modAPosition);
+		moduleB.setDrivePIDToSetPoint(modBPosition);
+		moduleC.setDrivePIDToSetPoint(modCPosition);
+		moduleD.setDrivePIDToSetPoint(modDPosition);
+	}
 
 	public static int getDriveEnc() {
-		return moduleA.getDriveEnc();
+		return (moduleA.getDriveEnc() + moduleB.getDriveEnc() + moduleC.getDriveEnc() + moduleD.getDriveEnc())/4;
 	}
 	
 	public static void autoSetRot(double rot) {

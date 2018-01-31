@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveAuto {
 //	private PIDControllerAIAO drivePID;
 //    private PIDControllerAIAO rotDrivePID;
-	private PIDController drivePID;
+//	private PIDController drivePID;
     private PIDController rotDrivePID;
 
     private AHRS gyro;
@@ -32,14 +32,14 @@ public class DriveAuto {
 		
 		pidInputForDrive = new PIDSourceFilter((double value) -> (DriveTrain.getDriveEnc()));
 		
-		drivePID = new PIDController(Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, 
-			   pidInputForDrive, 
-			   speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
+//		drivePID = new PIDController(Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, 
+//			   pidInputForDrive, 
+//			   speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
 		rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, 
 			   gyro, 
 			   rot -> DriveTrain.autoSetRot(rot));
 		
-		drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
+//		drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
 		rotDrivePID.setAbsoluteTolerance(1.5);  // degrees off 
 		   
 	   //rotDrivePID.setToleranceBuffer(3);        
@@ -50,8 +50,8 @@ public class DriveAuto {
 		SmartDashboard.putNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I);
 		SmartDashboard.putNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D);
 	   
-		drivePID.setSetpoint(0);
-		drivePID.reset();    	   
+//		drivePID.setSetpoint(0);
+//		drivePID.reset();    	   
     }
     
 	public void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
@@ -67,8 +67,9 @@ public class DriveAuto {
         DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle),
         		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
  
-        drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
-        drivePID.enable();
+        DriveTrain.setAllDrivePosition(convertToTicks(inches));
+//        drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
+//        drivePID.enable();
     }
     
     public void driveInches(double inches, double angle,  double maxPower) {
@@ -77,17 +78,17 @@ public class DriveAuto {
 
     public void reset() {
     	DriveTrain.resetDriveEncoders();
-    	drivePID.reset();
-    	drivePID.setSetpoint(0);
+//    	drivePID.reset();
+//    	drivePID.setSetpoint(0);
     	rotDrivePID.reset();
     	rotDrivePID.setSetpoint(0);
     	gyro.reset();
-     	drivePID.enable();
+//     	drivePID.enable();
     	
     }
     
     public void stop() {
-    	drivePID.setSetpoint(drivePID.get());
+//    	drivePID.setSetpoint(drivePID.get());
     	rotDrivePID.setSetpoint(rotDrivePID.get());
     }
     
@@ -99,14 +100,14 @@ public class DriveAuto {
     	
     	maxPowerAllowed = maxPower;
        	curPowerSetting = .18;
-        drivePID.disable();
+//        drivePID.disable();
         rotDrivePID.setSetpoint(rotDrivePID.getSetpoint() + degrees);
         rotDrivePID.enable();
         setPowerOutput(curPowerSetting);
     }
     
     public void continuousTurn(double degrees, double maxPower) {
-    	 drivePID.disable();
+//    	 drivePID.disable();
          rotDrivePID.setSetpoint(gyro.getAngle() + degrees);
          rotDrivePID.enable();
          setPowerOutput(maxPower);
@@ -118,8 +119,8 @@ public class DriveAuto {
            DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(0), DriveTrain.angleToLoc(0),
            		DriveTrain.angleToLoc(0), DriveTrain.angleToLoc(0));
            rotDrivePID.disable();
-           drivePID.setSetpoint(DriveTrain.getDriveEnc()+ convertToTicks(inches));
-           drivePID.enable();
+//           drivePID.setSetpoint(DriveTrain.getDriveEnc()+ convertToTicks(inches));
+//           drivePID.enable();
    }
 
     public void tick() {
@@ -146,12 +147,12 @@ public class DriveAuto {
         // Sets the PID values based on input from the SmartDashboard
         // This is only needed during tuning
         rotDrivePID.setPID(SmartDashboard.getNumber("ROT P",Calibration.AUTO_ROT_P), SmartDashboard.getNumber("ROT I", Calibration.AUTO_ROT_I), SmartDashboard.getNumber("ROT D", Calibration.AUTO_ROT_D));
-        drivePID.setPID(SmartDashboard.getNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P), SmartDashboard.getNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I), SmartDashboard.getNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D));
+//        drivePID.setPID(SmartDashboard.getNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P), SmartDashboard.getNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I), SmartDashboard.getNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D));
 
     }
 
     private void setPowerOutput(double powerLevel) {
-        drivePID.setOutputRange(-powerLevel, powerLevel);
+//        drivePID.setOutputRange(-powerLevel, powerLevel);
         rotDrivePID.setOutputRange(-powerLevel, powerLevel);
     }
 
@@ -165,7 +166,8 @@ public class DriveAuto {
     }
 
     public boolean hasArrived() {
-        return drivePID.onTarget() ;//&& rotDrivePID.onTarget();
+    	return false;
+        //return drivePID.onTarget() ;//&& rotDrivePID.onTarget();
     }
 
     public boolean turnCompleted() {
@@ -174,10 +176,10 @@ public class DriveAuto {
 
     public void setPIDstate(boolean isEnabled) {
         if (isEnabled) {
-            drivePID.enable();
+//            drivePID.enable();
             rotDrivePID.enable();
         } else {
-            drivePID.disable();
+//            drivePID.disable();
             rotDrivePID.disable();
         }
     }
@@ -194,10 +196,10 @@ public class DriveAuto {
     }
 
     public void showEncoderValues() {
-        SmartDashboard.putNumber("Drive PID Setpoint: ", drivePID.getSetpoint());
-        SmartDashboard.putNumber("Drive PID Get: ", drivePID.get());
-        SmartDashboard.putNumber("Drive PID Error: ", drivePID.getError());
-        SmartDashboard.putBoolean("Drive On Target", drivePID.onTarget());
+//        SmartDashboard.putNumber("Drive PID Setpoint: ", drivePID.getSetpoint());
+//        SmartDashboard.putNumber("Drive PID Get: ", drivePID.get());
+//        SmartDashboard.putNumber("Drive PID Error: ", drivePID.getError());
+//        SmartDashboard.putBoolean("Drive On Target", drivePID.onTarget());
         SmartDashboard.putNumber("Drive Encoder", DriveTrain.getDriveEnc());
         
         SmartDashboard.putNumber("Gyro", round2(gyro.getAngle()));
