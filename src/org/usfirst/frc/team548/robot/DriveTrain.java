@@ -327,6 +327,13 @@ public class DriveTrain implements PIDOutput {
 		return new double[] {moduleA.getTurnOrientation(), moduleB.getTurnOrientation(),
 				moduleC.getTurnOrientation(), moduleD.getTurnOrientation()};
 	}
+	
+	public static void setDriveModulesPIDValues(double p, double i, double d){
+		moduleA.setDrivePIDValues(p, i, d);
+		moduleB.setDrivePIDValues(p, i, d);
+		moduleC.setDrivePIDValues(p, i, d);
+		moduleD.setDrivePIDValues(p, i, d);
+	}
 
 	private static volatile double pidFWD = 0, pidSTR = 0;
 }

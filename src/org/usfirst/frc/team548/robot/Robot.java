@@ -43,6 +43,11 @@ public class Robot extends IterativeRobot {
       	autoChooser.addObject(autoSwitch, autoSwitch);
       	autoChooser.addObject(visionAuto, visionAuto);
       	
+      	SmartDashboard.putNumber("Auto P:", 0);
+    	SmartDashboard.putNumber("Auto I:", 0);
+    	SmartDashboard.putNumber("Auto D:", 0);
+      	
+      	
       	SmartDashboard.putData("Auto choices", autoChooser);
     }
     
@@ -89,6 +94,8 @@ public class Robot extends IterativeRobot {
             driveAuto.tick();
             driveAuto.showEncoderValues();
     	}
+    	
+    	DriveTrain.setDriveModulesPIDValues(SmartDashboard.getNumber("Auto P:", 0), SmartDashboard.getNumber("Drive I:", 0), SmartDashboard.getNumber("Auto D:", 0));
     }
     
     public void disabledInit() {

@@ -41,7 +41,7 @@ public class AutoBaseLine extends AutoBaseClass{
 			case 7:
 				break;
 			case 8:
-				setStep(0);
+				setStep(100000);
 			//DriveTrain.setTurnOrientation(0, 0, 0, 0);
 			}
 		}

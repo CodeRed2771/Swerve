@@ -161,6 +161,12 @@ public class Module {
 		drive.setNeutralMode(b ? NeutralMode.Brake : NeutralMode.Coast);
 	}
 	
+	public void setDrivePIDValues(double p, double i, double d){
+		drive.config_kP(0, p, 500);
+		drive.config_kI(0, i, 500);
+		drive.config_kD(0, d, 500);
+	}
+	
 	
 	
 }
