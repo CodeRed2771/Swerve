@@ -75,7 +75,11 @@ public class DriveTrain implements PIDOutput {
 		moduleC.setTurnOrientation(modCPosition);
 		moduleD.setTurnOrientation(modDPosition);
 	}
-	
+
+	public static void setAllTurnOrientiation(double loc) {
+		setTurnOrientation(loc, loc, loc, loc);
+	}
+
 	public static void setAllDrivePosition(int position) {
 		setDrivePosition(position,position,position,position);
 	}
@@ -103,10 +107,7 @@ public class DriveTrain implements PIDOutput {
 		setDrivePower(power, power, power, power);
 	}
 
-	public static void setAllTurnOrientiation(double loc) {
-		setTurnOrientation(loc, loc, loc, loc);
-	}
-
+	
 	public static boolean isModuleATurnEncConnected() {
 		return moduleA.isTurnEncConnected();
 	}

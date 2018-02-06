@@ -64,8 +64,7 @@ public class DriveAuto {
         
         rotDrivePID.disable();
                
-        DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle),
-        		DriveTrain.angleToLoc(angle), DriveTrain.angleToLoc(angle));
+        DriveTrain.setAllTurnOrientiation(DriveTrain.angleToLoc(angle));
  
         DriveTrain.setAllDrivePosition(convertToTicks(inches));
 //        drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
