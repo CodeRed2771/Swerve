@@ -148,6 +148,10 @@ public class Module {
 		return turn.getClosedLoopError(0);
 	}
 	
+	public double getDriveError(){
+		return drive.getClosedLoopError(0);
+	}
+	
 	public void stopBoth() {
 		setDrivePower(0);
 		setTurnPower(0);

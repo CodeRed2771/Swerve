@@ -22,6 +22,7 @@ public class DriveAuto {
 
     private double maxPowerAllowed = 1;
     private double curPowerSetting = 1;
+    private boolean isDriveInchesRunning = false;
     
     public DriveAuto() {
 		DriveTrain.getInstance();
@@ -57,6 +58,7 @@ public class DriveAuto {
 	public void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
         maxPowerAllowed = maxPower;
         curPowerSetting = startPowerLevel;  // the minimum power required to start moving.  (Untested)
+        isDriveInchesRunning = true;
 
         SmartDashboard.putNumber("DRIVE INCHES", inches);
         
@@ -66,7 +68,7 @@ public class DriveAuto {
                
         DriveTrain.setAllTurnOrientiation(DriveTrain.angleToLoc(angle));
  
-        DriveTrain.setAllDrivePosition(convertToTicks(inches));
+        DriveTrain.setAllDrivePosition(DriveTrain.getDriveEnc()+ convertToTicks(inches));
 //        drivePID.setSetpoint(drivePID.getSetpoint() + convertToTicks(inches));
 //        drivePID.enable();
     }
@@ -89,11 +91,13 @@ public class DriveAuto {
     public void stop() {
 //    	drivePID.setSetpoint(drivePID.get());
     	rotDrivePID.setSetpoint(rotDrivePID.get());
+    	isDriveInchesRunning = false;
     }
     
     public void turnDegrees(double degrees, double maxPower) {
     	// Turns using the Gyro, relative to the current position
     	// Use "turnCompleted" method to determine when the turn is done
+    	isDriveInchesRunning = false;
 
     	SmartDashboard.putNumber("TURN DEGREES CALL", degrees);
     	
@@ -125,6 +129,15 @@ public class DriveAuto {
     public void tick() {
     	// this is called roughly 50 times per second
     	
+    	if (isDriveInchesRunning){
+    		if (DriveTrain.getDriveError() > 0)
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(gyro.pidGet()*.5), DriveTrain.angleToLoc(-gyro.pidGet()*.5),
+    					DriveTrain.angleToLoc(-gyro.pidGet()*.5), DriveTrain.angleToLoc(gyro.pidGet()*.5));
+    		else
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-gyro.pidGet()*.5), DriveTrain.angleToLoc(gyro.pidGet()*.5),
+    					DriveTrain.angleToLoc(gyro.pidGet()*.5), DriveTrain.angleToLoc(-gyro.pidGet()*.5));
+    	}
+    	
     	// check for ramping up
         if (curPowerSetting < maxPowerAllowed) {  // then increase power a notch 
             curPowerSetting += .02; // was .007 evening of 4/5 // to figure out how fast this would be, multiply by 50 to see how much it would increase in 1 second.
@@ -146,8 +159,6 @@ public class DriveAuto {
         // Sets the PID values based on input from the SmartDashboard
         // This is only needed during tuning
         rotDrivePID.setPID(SmartDashboard.getNumber("ROT P",Calibration.AUTO_ROT_P), SmartDashboard.getNumber("ROT I", Calibration.AUTO_ROT_I), SmartDashboard.getNumber("ROT D", Calibration.AUTO_ROT_D));
-//        drivePID.setPID(SmartDashboard.getNumber("AUTO DRIVE P", Calibration.AUTO_DRIVE_P), SmartDashboard.getNumber("AUTO DRIVE I", Calibration.AUTO_DRIVE_I), SmartDashboard.getNumber("AUTO DRIVE D", Calibration.AUTO_DRIVE_D));
-
     }
 
     private void setPowerOutput(double powerLevel) {

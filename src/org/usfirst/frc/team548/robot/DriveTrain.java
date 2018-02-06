@@ -207,6 +207,10 @@ public class DriveTrain implements PIDOutput {
 				Math.abs(moduleC.getError()) + 
 				Math.abs(moduleD.getError())) / 4d;
 	}
+	
+	public static double getDriveError(){
+		return moduleA.getDriveError();
+	}
 
 	/*
 	 * 

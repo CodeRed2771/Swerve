@@ -50,16 +50,16 @@ public final static int XBOX_PORT = 0;
 	public final static double DT_ROT_PID_D= .000;
 	public final static double DT_ROT_PID_IZONE = 18;
 
-	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 29.80;
+	public static final double DRIVE_DISTANCE_TICKS_PER_INCH = 32.313;
 	
 	public static final double AUTO_ROT_P = 0.03; // increased from .022 on 3/20/17 dvv
 	public static final double AUTO_ROT_I = 0;
 	public static final double AUTO_ROT_D = 0.067;
 
-	public static final double AUTO_DRIVE_P = 10.0;
+	public static final double AUTO_DRIVE_P = .5;
 	public static final double AUTO_DRIVE_I = 0.0;
 	public static final double AUTO_DRIVE_D = 0.0;
-	public static final int AUTO_DRIVE_IZONE = 0;
+	public static final int AUTO_DRIVE_IZONE = 50;
 
 
 	public static void loadSwerveCalibration() {

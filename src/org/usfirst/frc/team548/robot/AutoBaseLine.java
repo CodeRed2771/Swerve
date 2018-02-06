@@ -15,32 +15,40 @@ public class AutoBaseLine extends AutoBaseClass{
 			
 			switch(getCurrentStep()){
 			case 0:
-				setTimerAndAdvanceStep(2000);
-				driveInches(-30, 0, .3);
+				setTimerAndAdvanceStep(4000);
+				driveInches(90, 0, .1);
 				break;
 			case 1:
 				if(driveAuto().hasArrived())
 					advanceStep();
 				break;
 			case 2:
-				setTimerAndAdvanceStep(3000);
+				setTimerAndAdvanceStep(1000);
 				break;	
 			case 3:
 				break;
 			case 4:
-				setTimerAndAdvanceStep(2000);
-				driveInches(30, 0, .3);
+				setTimerAndAdvanceStep(4000);
+				driveInches(-90, 0, .1);
 				break;	
 			case 5:
 				if(driveAuto().hasArrived())
 					advanceStep();
 				break;
 			case 6:
-				setTimerAndAdvanceStep(3000);
+				setTimerAndAdvanceStep(1000);
 				break;	
 			case 7:
 				break;
 			case 8:
+				setTimerAndAdvanceStep(4000);
+				driveInches(0, 0, .3);
+				break;	
+			case 9:
+				if(driveAuto().hasArrived())
+					advanceStep();
+				break;
+			case 10:
 				setStep(100000);
 			//DriveTrain.setTurnOrientation(0, 0, 0, 0);
 			}

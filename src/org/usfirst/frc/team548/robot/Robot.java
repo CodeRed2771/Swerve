@@ -18,6 +18,7 @@ public class Robot extends IterativeRobot {
 	DriveAuto driveAuto;
 	SendableChooser<String> autoChooser;
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
+	final String autoRotateTest = "Auto Rotate Test";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
 	final String autoSwitch = "Auto Switch";
@@ -39,13 +40,14 @@ public class Robot extends IterativeRobot {
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
       	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
       	autoChooser.addObject(autoCalibrateDrive, autoCalibrateDrive);
+      	autoChooser.addObject(autoRotateTest, autoRotateTest);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
       	autoChooser.addObject(autoSwitch, autoSwitch);
       	autoChooser.addObject(visionAuto, visionAuto);
       	
-      	SmartDashboard.putNumber("Auto P:", 0);
-    	SmartDashboard.putNumber("Auto I:", 0);
-    	SmartDashboard.putNumber("Auto D:", 0);
+      	SmartDashboard.putNumber("Auto P:", Calibration.AUTO_DRIVE_P);
+    	SmartDashboard.putNumber("Auto I:", Calibration.AUTO_DRIVE_I);
+    	SmartDashboard.putNumber("Auto D:", Calibration.AUTO_DRIVE_D);
       	
       	
       	SmartDashboard.putData("Auto choices", autoChooser);
@@ -61,6 +63,9 @@ public class Robot extends IterativeRobot {
     	    case autoCalibrateDrive:
         		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
         		break;
+    	    case autoRotateTest:
+    	    	mAutoProgram = new AutoRotateTest(driveAuto, 1);
+    	    	break;
     	    case calibrateSwerveModules:
     	    	double[] pos = DriveTrain.getAllTurnOrientations();
     	    	Calibration.saveSwerveCalibration(pos[0], pos[1], pos[2], pos[3]);
@@ -96,6 +101,7 @@ public class Robot extends IterativeRobot {
     	}
     	
     	DriveTrain.setDriveModulesPIDValues(SmartDashboard.getNumber("Auto P:", 0), SmartDashboard.getNumber("Drive I:", 0), SmartDashboard.getNumber("Auto D:", 0));
+    	SmartDashboard.putNumber("Drive Error", DriveTrain.getAverageError());
     }
     
     public void disabledInit() {
