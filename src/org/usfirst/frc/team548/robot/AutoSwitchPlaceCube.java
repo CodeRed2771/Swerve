@@ -46,7 +46,7 @@ public class AutoSwitchPlaceCube extends AutoBaseClass {
 				advanceStep();
 				
 			case 5:
-				this.autoIsCompleted = true;
+				stop();
 				break;
 			}
 		}

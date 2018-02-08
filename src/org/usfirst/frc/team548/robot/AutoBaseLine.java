@@ -23,7 +23,7 @@ public class AutoBaseLine extends AutoBaseClass {
 					advanceStep();
 				break;
 			case 2:
-				this.autoIsCompleted = true;
+				stop();
 				break;
 			}
 		}

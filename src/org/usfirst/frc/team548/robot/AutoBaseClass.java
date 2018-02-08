@@ -7,11 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class AutoBaseClass {
-	private Timer mAutoTimer;		// note that the timer is ticked in isRunning
+	private Timer mAutoTimer;		// note that the timer is ticked in isRunning() and hasCompleted()
 	private int mRobotPosition;
 	private boolean mIsRunning = false;
-	
-	public boolean autoIsCompleted = false; // this can be used to know when to start a followup program
 	
 	public AutoBaseClass(int robotPosition) {
 		mRobotPosition = robotPosition;
@@ -45,6 +43,11 @@ public abstract class AutoBaseClass {
 	public boolean isRunning() {
 		mAutoTimer.tick();  // we need to tick the timer and this is a good place to do it.
 		return mIsRunning;
+	}
+	
+	public boolean hasCompleted() {
+		mAutoTimer.tick();  // we need to tick the timer and this is a good place to do it.
+		return !mIsRunning;
 	}
 
 	public int getCurrentStep() {

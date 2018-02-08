@@ -23,7 +23,7 @@ public class AutoStartToSwitch extends AutoBaseClass {
 					advanceStep();
 				break;
 			case 2:
-				this.autoIsCompleted = true;
+				stop(); // signals the end 
 				break;
 			}
 		}

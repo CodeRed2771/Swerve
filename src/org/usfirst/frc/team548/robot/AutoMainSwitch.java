@@ -3,7 +3,7 @@ package org.usfirst.frc.team548.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoMainSwitch extends AutoBaseClass{
-	AutoBaseClass mSubAuto;
+	AutoBaseClass mAutoSubroutine;
 	
 	public AutoMainSwitch(int robotPosition) {
 		super(robotPosition);
@@ -16,25 +16,22 @@ public class AutoMainSwitch extends AutoBaseClass{
 			
 			switch(getCurrentStep()) {
 			case 0:
-				mSubAuto = new AutoStartToSwitch(this.robotPosition());
-				mSubAuto.start();
+				mAutoSubroutine = new AutoStartToSwitch(this.robotPosition());
+				mAutoSubroutine.start();
 				advanceStep();
 				break;
 			case 1:
-				if (mSubAuto.autoIsCompleted)
+				if (mAutoSubroutine.hasCompleted())
 					advanceStep();
 				break;
 			case 2:
-				mSubAuto = new AutoSwitchPlaceCube(this.robotPosition());
-				mSubAuto.start();
+				mAutoSubroutine = new AutoSwitchPlaceCube(this.robotPosition());
+				mAutoSubroutine.start();
 				advanceStep();
 				break;
 			case 3:
-				if (mSubAuto.autoIsCompleted) {
-					this.autoIsCompleted = true;
-					advanceStep();
-				}
-				
+				if (mAutoSubroutine.hasCompleted()) 
+					stop();
 				break;
 			case 4:
 				break;			}
