@@ -23,6 +23,7 @@ public class DriveAuto {
     private double maxPowerAllowed = 1;
     private double curPowerSetting = 1;
     private boolean isDriveInchesRunning = false;
+    private int heading = 0;
     
     public DriveAuto() {
 		DriveTrain.getInstance();
@@ -98,6 +99,7 @@ public class DriveAuto {
     	// Turns using the Gyro, relative to the current position
     	// Use "turnCompleted" method to determine when the turn is done
     	isDriveInchesRunning = false;
+    	heading += degrees;
 
     	SmartDashboard.putNumber("TURN DEGREES CALL", degrees);
     	
@@ -131,11 +133,11 @@ public class DriveAuto {
     	
     	if (isDriveInchesRunning){
     		if (DriveTrain.getDriveError() > 0)
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(gyro.pidGet()*.5), DriveTrain.angleToLoc(-gyro.pidGet()*.5),
-    					DriveTrain.angleToLoc(-gyro.pidGet()*.5), DriveTrain.angleToLoc(gyro.pidGet()*.5));
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5),
+    					DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5));
     		else
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-gyro.pidGet()*.5), DriveTrain.angleToLoc(gyro.pidGet()*.5),
-    					DriveTrain.angleToLoc(gyro.pidGet()*.5), DriveTrain.angleToLoc(-gyro.pidGet()*.5));
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5),
+    					DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5));
     	}
     	
     	// check for ramping up

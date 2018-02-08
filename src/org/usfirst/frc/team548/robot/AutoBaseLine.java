@@ -15,8 +15,8 @@ public class AutoBaseLine extends AutoBaseClass{
 			
 			switch(getCurrentStep()){
 			case 0:
-				setTimerAndAdvanceStep(4000);
-				driveInches(90, 0, .1);
+				setTimerAndAdvanceStep(6000);
+				turnDegrees(20,.3);
 				break;
 			case 1:
 				if(driveAuto().hasArrived())
@@ -29,7 +29,7 @@ public class AutoBaseLine extends AutoBaseClass{
 				break;
 			case 4:
 				setTimerAndAdvanceStep(4000);
-				driveInches(-90, 0, .1);
+				driveInches(40, 0, .1);
 				break;	
 			case 5:
 				if(driveAuto().hasArrived())
