@@ -15,15 +15,22 @@ public class DriveAuto {
 //	private PIDControllerAIAO drivePID;
 //    private PIDControllerAIAO rotDrivePID;
 //	private PIDController drivePID;
-    private PIDController rotDrivePID;
+	private static DriveAuto instance;
+    private static PIDController rotDrivePID;
 
-    private AHRS gyro;
-    private double minDriveStartPower = .1;
+    private static AHRS gyro;
+    private static double minDriveStartPower = .1;
 
-    private double maxPowerAllowed = 1;
-    private double curPowerSetting = 1;
-    private boolean isDriveInchesRunning = false;
-    private int heading = 0;
+    private static double maxPowerAllowed = 1;
+    private static double curPowerSetting = 1;
+    private static boolean isDriveInchesRunning = false;
+    private static int heading = 0;
+    
+    public static DriveAuto getInstance() {
+		if (instance == null)
+			instance = new DriveAuto();
+		return instance;
+	}
     
     public DriveAuto() {
 		DriveTrain.getInstance();
@@ -56,7 +63,7 @@ public class DriveAuto {
 //		drivePID.reset();    	   
     }
     
-	public void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
+	public static void driveInches(double inches, double angle,  double maxPower, double startPowerLevel) {
         maxPowerAllowed = maxPower;
         curPowerSetting = startPowerLevel;  // the minimum power required to start moving.  (Untested)
         isDriveInchesRunning = true;
@@ -74,11 +81,11 @@ public class DriveAuto {
 //        drivePID.enable();
     }
     
-    public void driveInches(double inches, double angle,  double maxPower) {
+    public static void driveInches(double inches, double angle,  double maxPower) {
     	driveInches(inches, angle, maxPower, minDriveStartPower);
     }
 
-    public void reset() {
+    public static void reset() {
     	DriveTrain.resetDriveEncoders();
 //    	drivePID.reset();
 //    	drivePID.setSetpoint(0);
@@ -89,13 +96,13 @@ public class DriveAuto {
     	
     }
     
-    public void stop() {
+    public static void stop() {
 //    	drivePID.setSetpoint(drivePID.get());
     	rotDrivePID.setSetpoint(rotDrivePID.get());
     	isDriveInchesRunning = false;
     }
     
-    public void turnDegrees(double degrees, double maxPower) {
+    public static void turnDegrees(double degrees, double maxPower) {
     	// Turns using the Gyro, relative to the current position
     	// Use "turnCompleted" method to determine when the turn is done
     	isDriveInchesRunning = false;
@@ -111,14 +118,14 @@ public class DriveAuto {
         setPowerOutput(curPowerSetting);
     }
     
-    public void continuousTurn(double degrees, double maxPower) {
+    public static void continuousTurn(double degrees, double maxPower) {
 //    	 drivePID.disable();
          rotDrivePID.setSetpoint(gyro.getAngle() + degrees);
          rotDrivePID.enable();
          setPowerOutput(maxPower);
     }
     
-    public void continuousDrive(double inches, double maxPower) {
+    public static void continuousDrive(double inches, double maxPower) {
     	   setPowerOutput(maxPower);
            
            DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(0), DriveTrain.angleToLoc(0),
@@ -128,7 +135,7 @@ public class DriveAuto {
 //           drivePID.enable();
    }
 
-    public void tick() {
+    public static void tick() {
     	// this is called roughly 50 times per second
     	
     	if (isDriveInchesRunning){
@@ -163,30 +170,30 @@ public class DriveAuto {
         rotDrivePID.setPID(SmartDashboard.getNumber("ROT P",Calibration.AUTO_ROT_P), SmartDashboard.getNumber("ROT I", Calibration.AUTO_ROT_I), SmartDashboard.getNumber("ROT D", Calibration.AUTO_ROT_D));
     }
 
-    private void setPowerOutput(double powerLevel) {
+    private static void setPowerOutput(double powerLevel) {
 //        drivePID.setOutputRange(-powerLevel, powerLevel);
         rotDrivePID.setOutputRange(-powerLevel, powerLevel);
     }
 
-    public void setMaxPowerOutput(double maxPower) {
+    public static void setMaxPowerOutput(double maxPower) {
         maxPowerAllowed = maxPower;
         // "tick" will take care of implementing this power level
     }
 
-    public double getDistanceTravelled() {
+    public static double getDistanceTravelled() {
         return Math.abs(convertTicksToInches(DriveTrain.getDriveEnc()));
     }
 
-    public boolean hasArrived() {
+    public static boolean hasArrived() {
     	return false;
         //return drivePID.onTarget() ;//&& rotDrivePID.onTarget();
     }
 
-    public boolean turnCompleted() {
+    public static boolean turnCompleted() {
         return hasArrived();
     }
 
-    public void setPIDstate(boolean isEnabled) {
+    public static void setPIDstate(boolean isEnabled) {
         if (isEnabled) {
 //            drivePID.enable();
             rotDrivePID.enable();
@@ -196,18 +203,18 @@ public class DriveAuto {
         }
     }
 
-    public void disable() {
+    public static void disable() {
     	setPIDstate (false);
     }
-    private int convertToTicks(double inches) {
+    private static int convertToTicks(double inches) {
         return (int) (inches * Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);
     }
 
-    private double convertTicksToInches(int ticks) {
+    private static double convertTicksToInches(int ticks) {
         return ticks / Calibration.DRIVE_DISTANCE_TICKS_PER_INCH;
     }
 
-    public void showEncoderValues() {
+    public static void showEncoderValues() {
 //        SmartDashboard.putNumber("Drive PID Setpoint: ", drivePID.getSetpoint());
 //        SmartDashboard.putNumber("Drive PID Get: ", drivePID.get());
 //        SmartDashboard.putNumber("Drive PID Error: ", drivePID.getError());
@@ -231,7 +238,7 @@ public class DriveAuto {
 
     }
     
-    private Double round2(Double val) { 
+    private static Double round2(Double val) { 
     	// added this back in on 1/15/18
     	return new BigDecimal(val.toString()).setScale(2,RoundingMode.HALF_UP).doubleValue(); 
     	}

@@ -6,8 +6,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class VisionAuto extends AutoBaseClass {
-	public VisionAuto(DriveAuto driveAuto, int robotPosition) {
-		super(driveAuto, robotPosition);
+	public VisionAuto(int robotPosition) {
+		super(robotPosition);
 	}
 
 
@@ -24,7 +24,8 @@ public class VisionAuto extends AutoBaseClass {
 	
 	public void tick() {
 		if (isRunning()) {		
-			this.driveAuto().showEncoderValues();
+			
+			DriveAuto.showEncoderValues();
 			SmartDashboard.putNumber("Auto Step", getCurrentStep());
 
 			while (true) { //TODO make real while loop :)

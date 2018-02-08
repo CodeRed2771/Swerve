@@ -7,16 +7,18 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public abstract class AutoBaseClass {
-	DriveAuto mDriveAuto;
-	int mRobotPosition;
-	boolean mIsRunning = false;
-	Timer mAutoTimer;
-
-	public AutoBaseClass(DriveAuto driveAuto, int robotPosition) {
-		mDriveAuto = driveAuto;
+	private Timer mAutoTimer;		// note that the timer is ticked in isRunning
+	private int mRobotPosition;
+	private boolean mIsRunning = false;
+	
+	public boolean autoIsCompleted = false; // this can be used to know when to start a followup program
+	
+	public AutoBaseClass(int robotPosition) {
 		mRobotPosition = robotPosition;
 		mAutoTimer = new Timer();
 	}
+
+	public abstract void tick();
 
 	public String getGameData() {
 		return DriverStation.getInstance().getGameSpecificMessage();
@@ -30,8 +32,6 @@ public abstract class AutoBaseClass {
 		return getGameData().charAt(1);
 	}
 	
-	public abstract void tick();
-
 	public void start() {
 		mAutoTimer.setStage(0);
 		mIsRunning = true;
@@ -39,7 +39,7 @@ public abstract class AutoBaseClass {
 
 	public void stop() {
 		mIsRunning = false;
-		mDriveAuto.stop();
+		DriveAuto.stop();
 	}
 
 	public boolean isRunning() {
@@ -63,24 +63,24 @@ public abstract class AutoBaseClass {
 		return mAutoTimer.getTimeRemainingMilliseconds();
 	}
 
-	public DriveAuto driveAuto() {
-		return mDriveAuto;
-	}
-
 	public void driveInches(double distance, double angle, double maxPower) {
-		mDriveAuto.driveInches(distance, angle, maxPower);
+		DriveAuto.driveInches(distance, angle, maxPower);
+	}
+	
+	public boolean driveCompleted() {
+		return DriveAuto.hasArrived();
 	}
 
 	public void turnDegrees(double degrees, double maxPower) {
-		mDriveAuto.turnDegrees(degrees, maxPower);
+		DriveAuto.turnDegrees(degrees, maxPower);
 	}
 
 	public void continuousTurn(double degrees, double maxPower) {
-		mDriveAuto.continuousTurn(degrees, maxPower);
+		DriveAuto.continuousTurn(degrees, maxPower);
 	}
 	 
 	public void continuousDrive(double inches, double maxPower) {
-  	  mDriveAuto.continuousDrive(inches, maxPower);
+		DriveAuto.continuousDrive(inches, maxPower);
 	}
 	
 	public int robotPosition() {

@@ -3,14 +3,13 @@ package org.usfirst.frc.team548.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutoRotateTest extends AutoBaseClass{
-	public AutoRotateTest(DriveAuto driveAuto, int robotPosition){
-		super(driveAuto, robotPosition);
+	public AutoRotateTest(int robotPosition){
+		super(robotPosition);
 	}
 	
 	public void tick(){
 		if(isRunning()){
 			
-			driveAuto().showEncoderValues();
 			SmartDashboard.putNumber("Auto Step", getCurrentStep());
 			
 			switch(getCurrentStep()){
@@ -19,7 +18,7 @@ public class AutoRotateTest extends AutoBaseClass{
 				turnDegrees(90,.5);
 				break;
 			case 1:
-				if(driveAuto().hasArrived())
+				if(driveCompleted())
 					advanceStep();
 				break;
 			case 2:
@@ -32,7 +31,7 @@ public class AutoRotateTest extends AutoBaseClass{
 				turnDegrees(-90,.5);
 				break;	
 			case 5:
-				if(driveAuto().hasArrived())
+				if(driveCompleted())
 					advanceStep();
 				break;
 //			case 6:
@@ -45,7 +44,7 @@ public class AutoRotateTest extends AutoBaseClass{
 //				driveInches(0, 0, .3);
 //				break;	
 //			case 9:
-//				if(driveAuto().hasArrived())
+//				if(driveCompleted())
 //					advanceStep();
 //				break;
 			case 10:

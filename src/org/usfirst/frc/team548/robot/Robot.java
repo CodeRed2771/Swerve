@@ -15,7 +15,6 @@ public class Robot extends IterativeRobot {
 	private DriverStation dt;
 	
 	//---AUTO IMPORTS---
-	DriveAuto driveAuto;
 	SendableChooser<String> autoChooser;
 	final String autoCalibrateDrive = "Auto Calibrate Drive";
 	final String autoRotateTest = "Auto Rotate Test";
@@ -31,10 +30,11 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
     	xbox = new XboxController(Calibration.XBOX_PORT);
     	DriveTrain.getInstance();
+      	DriveAuto.getInstance();
+    	Lift.getInstance();
     	dt = DriverStation.getInstance();
       	Calibration.loadSwerveCalibration();
   	  
-      	driveAuto = new DriveAuto();
       	autoChooser = new SendableChooser<String>();
       	autoChooser.addDefault(autoBaseLine, autoBaseLine);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
@@ -48,12 +48,14 @@ public class Robot extends IterativeRobot {
       	SmartDashboard.putNumber("Auto P:", Calibration.AUTO_DRIVE_P);
     	SmartDashboard.putNumber("Auto I:", Calibration.AUTO_DRIVE_I);
     	SmartDashboard.putNumber("Auto D:", Calibration.AUTO_DRIVE_D);
-      	
-      	
+    	
+    	SmartDashboard.putNumber("Robot Position", 1);
+      	      	
       	SmartDashboard.putData("Auto choices", autoChooser);
     }
     
     public void autonomousInit() {
+    	int mRobotPosition = (int) SmartDashboard.getNumber("Robot Position",1);
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
     	
@@ -61,10 +63,10 @@ public class Robot extends IterativeRobot {
     	
     	switch(autoSelected){
     	    case autoCalibrateDrive:
-        		mAutoProgram = new AutoCalibrateDrive(driveAuto, 1);
+        		mAutoProgram = new AutoCalibrateDrive(mRobotPosition);
         		break;
     	    case autoRotateTest:
-    	    	mAutoProgram = new AutoRotateTest(driveAuto, 1);
+    	    	mAutoProgram = new AutoRotateTest(mRobotPosition);
     	    	break;
     	    case calibrateSwerveModules:
     	    	double[] pos = DriveTrain.getAllTurnOrientations();
@@ -74,19 +76,19 @@ public class Robot extends IterativeRobot {
     	    	Calibration.resetSwerveDriveCalibration();
     	    	break;
     	    case autoSwitch:
-    	    	mAutoProgram = new AutoSwitch(driveAuto, 1);
+    	    	mAutoProgram = new AutoMainSwitch(mRobotPosition);
         		break;
     	    case autoCubeFollow:
-    	    	mAutoProgram = new AutoCubeFollow(driveAuto, 1);
+    	    	mAutoProgram = new AutoCubeFollow(mRobotPosition);
     	    	break;
     	    case autoBaseLine:
-    	    	mAutoProgram = new AutoBaseLine(driveAuto, 1);
+    	    	mAutoProgram = new AutoBaseLine(mRobotPosition);
     	    	break;
     	    case visionAuto:
-    	    	mAutoProgram = new VisionAuto(driveAuto, 1);
+    	    	mAutoProgram = new VisionAuto(mRobotPosition);
     	} 
 
-    	driveAuto.reset();
+    	DriveAuto.reset();
     	DriveTrain.setAllTurnOrientiation(0);
     	mAutoProgram.start();
     
@@ -96,8 +98,8 @@ public class Robot extends IterativeRobot {
     
     	if (mAutoProgram != null) {
         	mAutoProgram.tick();
-            driveAuto.tick();
-            driveAuto.showEncoderValues();
+            DriveAuto.tick();
+            DriveAuto.showEncoderValues();
     	}
     	
     	DriveTrain.setDriveModulesPIDValues(SmartDashboard.getNumber("Auto P:", 0), SmartDashboard.getNumber("Drive I:", 0), SmartDashboard.getNumber("Auto D:", 0));
@@ -116,10 +118,11 @@ public class Robot extends IterativeRobot {
   
     @Override
     public void teleopInit() {
-    	driveAuto.disable();
+    	DriveAuto.disable();
     }
     
     public void teleopPeriodic() {    	
+    	
     	DriveTrain.fieldCentricDrive(xbox.getLeftStickYAxis(), -xbox.getLeftStickXAxis(), powTwoThing(xbox.getRightStickXAxis()));
     	
     	SmartDashboard.putBoolean("Mod A Turn Encoder", DriveTrain.isModuleATurnEncConnected());
@@ -140,9 +143,7 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
 //    	LiveWindow.addSensor("DriveSystem", "Hyro", DriveTrain.getgyro());
     }
-    
-    
-    
+       
     private double powTwoThing(double v) {
     	return (v > 0 ) ? Math.pow(v, 2) : -Math.pow(v, 2);
     }
