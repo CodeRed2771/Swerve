@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
 	private XboxController xbox;
-	private DriverStation dt;
 	
 	//---AUTO IMPORTS---
 	SendableChooser<String> autoChooser;
@@ -29,12 +28,14 @@ public class Robot extends IterativeRobot {
 	
     public void robotInit() {
     	xbox = new XboxController(Calibration.XBOX_PORT);
+    	RobotGyro.getInstance();
     	DriveTrain.getInstance();
       	DriveAuto.getInstance();
     	Lift.getInstance();
-    	dt = DriverStation.getInstance();
       	Calibration.loadSwerveCalibration();
-  	  
+      	
+      	RobotGyro.reset();  // this may need to be done later to give Gyro time to initialize
+      	
       	autoChooser = new SendableChooser<String>();
       	autoChooser.addDefault(autoBaseLine, autoBaseLine);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
@@ -129,8 +130,8 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putBoolean("Mod B Turn Encoder", DriveTrain.isModuleBTurnEncConnected());
     	SmartDashboard.putBoolean("Mod C Turn Encoder", DriveTrain.isModuleCTurnEncConnected());
     	SmartDashboard.putBoolean("Mod D Turn Encoder", DriveTrain.isModuleDTurnEncConnected());
-    	SmartDashboard.putNumber("Gyro angle", DriveTrain.getgyroAngle());
-    	SmartDashboard.putNumber("Gyro radians",  DriveTrain.getGyroAngleInRad());
+    	SmartDashboard.putNumber("Gyro angle", RobotGyro.getAngle());
+    	SmartDashboard.putNumber("Gyro radians",  RobotGyro.getGyroAngleInRad());
     	SmartDashboard.putNumber("Avg. Error", DriveTrain.getAverageError());
     	
     }

@@ -18,7 +18,6 @@ public class DriveAuto {
 	private static DriveAuto instance;
     private static PIDController rotDrivePID;
 
-    private static AHRS gyro;
     private static double minDriveStartPower = .1;
 
     private static double maxPowerAllowed = 1;
@@ -34,18 +33,12 @@ public class DriveAuto {
     
     public DriveAuto() {
 		DriveTrain.getInstance();
-		
-		this.gyro = DriveTrain.getgyro();
-		
-		PIDSourceFilter pidInputForDrive; 
-		
-		pidInputForDrive = new PIDSourceFilter((double value) -> (DriveTrain.getDriveEnc()));
-		
+			
 //		drivePID = new PIDController(Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, 
 //			   pidInputForDrive, 
 //			   speed -> DriveTrain.setDrivePower(speed, speed, speed, speed));
 		rotDrivePID = new PIDController(Calibration.AUTO_ROT_P, Calibration.AUTO_ROT_I, Calibration.AUTO_ROT_D, 
-			   gyro, 
+			   RobotGyro.getGyro(), 
 			   rot -> DriveTrain.autoSetRot(rot));
 		
 //		drivePID.setAbsoluteTolerance(Calibration.DRIVE_DISTANCE_TICKS_PER_INCH);  // 1" tolerance
@@ -91,7 +84,6 @@ public class DriveAuto {
 //    	drivePID.setSetpoint(0);
     	rotDrivePID.reset();
     	rotDrivePID.setSetpoint(0);
-    	gyro.reset();
 //     	drivePID.enable();
     	
     }
@@ -120,7 +112,7 @@ public class DriveAuto {
     
     public static void continuousTurn(double degrees, double maxPower) {
 //    	 drivePID.disable();
-         rotDrivePID.setSetpoint(gyro.getAngle() + degrees);
+         rotDrivePID.setSetpoint(RobotGyro.getAngle() + degrees);
          rotDrivePID.enable();
          setPowerOutput(maxPower);
     }
@@ -140,11 +132,11 @@ public class DriveAuto {
     	
     	if (isDriveInchesRunning){
     		if (DriveTrain.getDriveError() > 0)
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5),
-    					DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5));
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5),
+    					DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5));
     		else
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5),
-    					DriveTrain.angleToLoc((gyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(gyro.pidGet()-heading)*.5));
+    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5),
+    					DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5));
     	}
     	
     	// check for ramping up
@@ -221,7 +213,7 @@ public class DriveAuto {
 //        SmartDashboard.putBoolean("Drive On Target", drivePID.onTarget());
         SmartDashboard.putNumber("Drive Encoder", DriveTrain.getDriveEnc());
         
-        SmartDashboard.putNumber("Gyro", round2(gyro.getAngle()));
+        SmartDashboard.putNumber("Gyro", round2(RobotGyro.getAngle()));
         SmartDashboard.putNumber("Gyro PID Setpoint", rotDrivePID.getSetpoint());
         SmartDashboard.putNumber("Gyro PID error", round2(rotDrivePID.getError()));
 

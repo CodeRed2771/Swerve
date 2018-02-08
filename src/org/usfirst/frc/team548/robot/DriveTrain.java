@@ -13,7 +13,6 @@ public class DriveTrain implements PIDOutput {
 
 	private static DriveTrain instance;
 	private static Module moduleA, moduleB, moduleC, moduleD;
-	private static AHRS gyro;
 	private static PIDController pidControllerRot;
 
 	public static DriveTrain getInstance() {
@@ -35,21 +34,15 @@ public class DriveTrain implements PIDOutput {
 		moduleD = new Module(Calibration.DT_D_DRIVE_TALON_ID,
 				Calibration.DT_D_TURN_TALON_ID, Calibration.AUTO_DRIVE_P, Calibration.AUTO_DRIVE_I, Calibration.AUTO_DRIVE_D, Calibration.AUTO_DRIVE_IZONE, 4.20, 0.01, 0, 200);
 																	
-		gyro = new AHRS(SerialPort.Port.kUSB);
-		
 		//PID is for PID drive not for the modules
 		pidControllerRot = new PIDController(Calibration.DT_ROT_PID_P,
-				Calibration.DT_ROT_PID_I, Calibration.DT_ROT_PID_D, gyro, this);
+				Calibration.DT_ROT_PID_I, Calibration.DT_ROT_PID_D, RobotGyro.getGyro(), this);
 		pidControllerRot.setInputRange(-180.0f, 180.0f);
 		pidControllerRot.setOutputRange(-1.0, 1.0);
 		pidControllerRot.setContinuous(true);
 		
 		LiveWindow.addActuator("DriveSystem", "RotateController", pidControllerRot);
 
-	}
-
-	public static AHRS getgyro() {
-		return gyro;
 	}
 
 	public static void setDrivePower(double modAPower, double modBPower, double modCPower, double modDPower) {
@@ -182,18 +175,6 @@ public class DriveTrain implements PIDOutput {
 		}
 	}
 
-	public static double getgyroAngle() {
-		return gyro.getAngle();
-	}
-
-	public static double getGyroAngleInRad() {
-		double adjustedAngle = -Math.floorMod((long)gyro.getAngle(), 360);
-		if (adjustedAngle>180) 
-			adjustedAngle = -(360-adjustedAngle);
-		
-		return adjustedAngle * (Math.PI / 180d);
-	}
-
 	public static void setDriveBrakeMode(boolean b) {
 		moduleA.setBrakeMode(b);
 		moduleB.setBrakeMode(b);
@@ -273,10 +254,10 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static void pidDrive(double fwd, double strafe, double angle) {
-		double temp = (fwd * Math.cos(getGyroAngleInRad()))
-				+ (strafe * Math.sin(getGyroAngleInRad()));
-		strafe = (-fwd * Math.sin(getGyroAngleInRad()))
-				+ (strafe * Math.cos(getGyroAngleInRad()));
+		double temp = (fwd * Math.cos(RobotGyro.getGyroAngleInRad()))
+				+ (strafe * Math.sin(RobotGyro.getGyroAngleInRad()));
+		strafe = (-fwd * Math.sin(RobotGyro.getGyroAngleInRad()))
+				+ (strafe * Math.cos(RobotGyro.getGyroAngleInRad()));
 		fwd = temp;
 		if (!pidControllerRot.isEnabled())
 			pidControllerRot.enable();
@@ -292,10 +273,10 @@ public class DriveTrain implements PIDOutput {
 	}
 
 	public static void fieldCentricDrive(double fwd, double strafe, double rot) {
-		double temp = (fwd * Math.cos(getGyroAngleInRad()))
-				+ (strafe * Math.sin(getGyroAngleInRad()));
-		strafe = (-fwd * Math.sin(getGyroAngleInRad()))
-				+ (strafe * Math.cos(getGyroAngleInRad()));
+		double temp = (fwd * Math.cos(RobotGyro.getGyroAngleInRad()))
+				+ (strafe * Math.sin(RobotGyro.getGyroAngleInRad()));
+		strafe = (-fwd * Math.sin(RobotGyro.getGyroAngleInRad()))
+				+ (strafe * Math.cos(RobotGyro.getGyroAngleInRad()));
 		fwd = temp;
 		humanDrive(fwd, strafe, rot);
 	}
