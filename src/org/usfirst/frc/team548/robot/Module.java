@@ -66,27 +66,28 @@ public class Module {
 	}
 
 	/**
-	 * Getting the turn encoder position
+	 * Getting the turn encoder position (not absolute)
 	 * @return turn encoder position
 	 */
-	public double getTurnEncPos() {
+	public double getTurnRelativePosition() {
 		return turn.getSelectedSensorPosition(0);
 	}
 
 	/**
-	 * Thank you CD ozrien for this!!!
-	 * @return
+	 * Gets the absolute encoder position for the turn encoder
+	 * It will be a value between 0 and 1
+	 * @return turn encoder absolute position
 	 */
-	public double getAbsPos() {
+	public double getTurnAbsolutePosition() {
 		return (turn.getSensorCollection().getPulseWidthPosition() & 0xFFF)/4095d;
-	}
-
-	public int getDriveEnc() {
-		return drive.getSelectedSensorPosition(0);
 	}
 
 	public void resetTurnEnc() {
 		this.turn.getSensorCollection().setQuadraturePosition(0,500); 
+	}
+
+	public int getDriveEnc() {
+		return drive.getSelectedSensorPosition(0);
 	}
 
 	public void resetDriveEnc() {
@@ -131,17 +132,17 @@ public class Module {
 	 */	
 	public void setTurnOrientation(double position) {
 		double base = getTurnRotations() * FULL_ROTATION;
-		if (getTurnEncPos() >= 0) {
-			if ((base + (position * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
+		if (getTurnRelativePosition() >= 0) {
+			if ((base + (position * FULL_ROTATION)) - getTurnRelativePosition() < -FULL_ROTATION/2) {
 				base += FULL_ROTATION;
-			} else if ((base + (position * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
+			} else if ((base + (position * FULL_ROTATION)) - getTurnRelativePosition() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
 			turn.set(ControlMode.Position, (((position * FULL_ROTATION) + (base))));
 		} else {
-			if ((base - ((1-position) * FULL_ROTATION)) - getTurnEncPos() < -FULL_ROTATION/2) {
+			if ((base - ((1-position) * FULL_ROTATION)) - getTurnRelativePosition() < -FULL_ROTATION/2) {
 				base += FULL_ROTATION;
-			} else if ((base -((1-position) * FULL_ROTATION)) - getTurnEncPos() > FULL_ROTATION/2) {
+			} else if ((base -((1-position) * FULL_ROTATION)) - getTurnRelativePosition() > FULL_ROTATION/2) {
 				base -= FULL_ROTATION;
 			}
 			turn.set(ControlMode.Position, (base- (((1-position) * FULL_ROTATION))));	

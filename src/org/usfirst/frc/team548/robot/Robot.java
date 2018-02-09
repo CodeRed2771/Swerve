@@ -109,21 +109,6 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putNumber("Drive Error", DriveTrain.getAverageError());
     }
     
-    public void disabledInit() {
-    	DriveTrain.resetOffSet();
-    	DriveTrain.resetDriveEncoders();
-    }
-    
-    public void disabledPeriodic() {
-    	DriveTrain.setOffSets(); // sets turn calibrations
-    	DriveTrain.disablePID();
-    }
-  
-    @Override
-    public void teleopInit() {
-    	DriveAuto.disable();
-    }
-    
     public void teleopPeriodic() {    	
     	
     	DriveTrain.fieldCentricDrive(xbox.getLeftStickYAxis(), -xbox.getLeftStickXAxis(), powTwoThing(xbox.getRightStickXAxis()));
@@ -138,9 +123,24 @@ public class Robot extends IterativeRobot {
     	
     }
     
+    public void disabledInit() {
+    	DriveTrain.allowTurnEncoderReset(); // allows the turn encoders to be reset once during disabled periodic
+    	DriveTrain.resetDriveEncoders();
+    }
+    
+    public void disabledPeriodic() {
+    	DriveTrain.resetTurnEncoders();   // happens only once because a flag prevents multiple calls
+    	DriveTrain.disablePID();
+    }
+  
+    @Override
+    public void teleopInit() {
+    	DriveAuto.disable();
+    }
+    
     public void testInit() {
-		double[] orientations = DriveTrain.getInstance().getAllTurnOrientations();
-		Calibration.saveSwerveCalibration(orientations[0], orientations[1], orientations[2], orientations[3]);
+//		double[] orientations = DriveTrain.getInstance().getAllTurnOrientations();
+//		Calibration.saveSwerveCalibration(orientations[0], orientations[1], orientations[2], orientations[3]);
     }
     
     public void testPeriodic() {

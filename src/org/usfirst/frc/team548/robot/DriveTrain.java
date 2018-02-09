@@ -67,6 +67,16 @@ public class DriveTrain implements PIDOutput {
 		moduleB.setTurnOrientation(modBPosition);
 		moduleC.setTurnOrientation(modCPosition);
 		moduleD.setTurnOrientation(modDPosition);
+		
+		SmartDashboard.putNumber("TURN A RAW", moduleA.getTurnAbsolutePosition());
+		SmartDashboard.putNumber("TURN A POS", moduleA.getTurnRelativePosition());	
+		SmartDashboard.putNumber("TURN B RAW", moduleB.getTurnAbsolutePosition());
+		SmartDashboard.putNumber("TURN B POS", moduleB.getTurnRelativePosition());
+		SmartDashboard.putNumber("TURN C RAW", moduleC.getTurnAbsolutePosition());
+		SmartDashboard.putNumber("TURN C POS", moduleC.getTurnRelativePosition());
+		SmartDashboard.putNumber("TURN D RAW", moduleD.getTurnAbsolutePosition());
+		SmartDashboard.putNumber("TURN D POS", moduleD.getTurnRelativePosition());
+		
 	}
 
 	public static void setAllTurnOrientiation(double loc) {
@@ -139,39 +149,56 @@ public class DriveTrain implements PIDOutput {
 		}
 	}
 
-	private static boolean offSetSet = false;
+	private static boolean allowTurnEncoderReset = false;
 
-	public static void setOffSets() {
-		if (!offSetSet) {
+	public static void allowTurnEncoderReset() {
+		allowTurnEncoderReset = false;
+	}
+
+	/* 
+	 * Resets the turn encoder values relative to what we've 
+	 * determined to be the "zero" position. (the calibration values).
+	 * This is so the rest of the program can just treat the turn encoder
+	 * as if zero is the straight position.  We don't have to always calculate
+	 * based off the calibrated zero position.
+	 * e.g.  if the calibrated zero position is .25 and our current absolute position is .40
+	 * then we reset the encoder value to be .15 * 4095, so we know were .15 away from the zero
+	 * position.  The 4095 converts the position back to ticks.
+	 * 
+	 * Bottom line is that this is what applies the turn calibration values.
+	 */
+	public static void resetTurnEncoders() {
+		
+		if (!allowTurnEncoderReset) {
 			double modAOff = 0, modBOff = 0, modCOff = 0, modDOff = 0;
+		
 			moduleA.setTurnPower(0);
 			moduleC.setTurnPower(0);
 			moduleB.setTurnPower(0);
 			moduleD.setTurnPower(0);
 
-			modAOff = DriveTrain.moduleA.getAbsPos();
-			modBOff = DriveTrain.moduleB.getAbsPos();
-			modCOff = DriveTrain.moduleC.getAbsPos();
-			modDOff = DriveTrain.moduleD.getAbsPos();
+			// first find the current absolute position of the turn encoders
+			modAOff = DriveTrain.moduleA.getTurnAbsolutePosition();
+			modBOff = DriveTrain.moduleB.getTurnAbsolutePosition();
+			modCOff = DriveTrain.moduleC.getTurnAbsolutePosition();
+			modDOff = DriveTrain.moduleD.getTurnAbsolutePosition();
 
-			//resetAllEnc(); 
-			moduleA.setEncPos((int) (locSub(modAOff, Calibration.GET_DT_A_ABS_ZERO()) * 4095d));
-			moduleB.setEncPos((int) (locSub(modBOff, Calibration.GET_DT_B_ABS_ZERO()) * 4095d));
-			moduleC.setEncPos((int) (locSub(modCOff, Calibration.GET_DT_C_ABS_ZERO()) * 4095d));
-			moduleD.setEncPos((int) (locSub(modDOff, Calibration.GET_DT_D_ABS_ZERO()) * 4095d));
-			offSetSet = true;
+			// now use the difference between the current position and the calibration zero position
+			// to tell the encoder what the current relative position is (relative to the zero pos)
+			moduleA.setEncPos((int) (calculatePositionDifference(modAOff, Calibration.GET_DT_A_ABS_ZERO()) * 4095d));
+			moduleB.setEncPos((int) (calculatePositionDifference(modBOff, Calibration.GET_DT_B_ABS_ZERO()) * 4095d));
+			moduleC.setEncPos((int) (calculatePositionDifference(modCOff, Calibration.GET_DT_C_ABS_ZERO()) * 4095d));
+			moduleD.setEncPos((int) (calculatePositionDifference(modDOff, Calibration.GET_DT_D_ABS_ZERO()) * 4095d));
+			
+			allowTurnEncoderReset = true;
 		}
 	}
 
-	public static void resetOffSet() {
-		offSetSet = false;
-	}
-
-	private static double locSub(double v, double c) {
-		if (v - c > 0) {
-			return v - c;
+	private static double calculatePositionDifference(double currentPosition, double calibrationZeroPosition) {
+		if (currentPosition - calibrationZeroPosition > 0) {
+			return currentPosition - calibrationZeroPosition;
 		} else {
-			return (1 - c) + v;
+			return (1 - calibrationZeroPosition) + currentPosition;
 		}
 	}
 
