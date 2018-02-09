@@ -154,7 +154,7 @@ public class DriveTrain implements PIDOutput {
 			modCOff = DriveTrain.moduleC.getAbsPos();
 			modDOff = DriveTrain.moduleD.getAbsPos();
 
-//			resetAllEnc(); removed 1/8/18
+			//resetAllEnc(); 
 			moduleA.setEncPos((int) (locSub(modAOff, Calibration.GET_DT_A_ABS_ZERO()) * 4095d));
 			moduleB.setEncPos((int) (locSub(modBOff, Calibration.GET_DT_B_ABS_ZERO()) * 4095d));
 			moduleC.setEncPos((int) (locSub(modCOff, Calibration.GET_DT_C_ABS_ZERO()) * 4095d));

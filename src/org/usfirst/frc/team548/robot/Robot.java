@@ -115,7 +115,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void disabledPeriodic() {
-    	//DriveTrain.setOffSets();
+    	DriveTrain.setOffSets(); // sets turn calibrations
     	DriveTrain.disablePID();
     }
   
