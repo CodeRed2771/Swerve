@@ -91,8 +91,10 @@ public class Robot extends IterativeRobot {
 
     	DriveAuto.reset();
     	DriveTrain.setAllTurnOrientiation(0);
-    	mAutoProgram.start();
-    
+        	
+    	if (mAutoProgram != null) {
+    		mAutoProgram.start();
+    	}
     }
     
     public void autonomousPeriodic() {
@@ -113,7 +115,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void disabledPeriodic() {
-    	DriveTrain.setOffSets();
+    	//DriveTrain.setOffSets();
     	DriveTrain.disablePID();
     }
   

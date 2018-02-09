@@ -3,6 +3,8 @@ package org.usfirst.frc.team548.robot;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Module {
 	private WPI_TalonSRX drive, turn;
 	private final double FULL_ROTATION = 4096d, TURN_P, TURN_I, TURN_D, DRIVE_P, DRIVE_I, DRIVE_D;
@@ -109,6 +111,9 @@ public class Module {
 	}
 	
 	public double getTurnOrientation() {
+		SmartDashboard.putNumber("module-a-" + this.hashCode(), turn.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("module-b-" + this.hashCode(), turn.getSelectedSensorPosition(0) % FULL_ROTATION);
+		SmartDashboard.putNumber("module-c-" + this.hashCode(), (turn.getSelectedSensorPosition(0) % FULL_ROTATION) / FULL_ROTATION);
 		return (turn.getSelectedSensorPosition(0) % FULL_ROTATION) / FULL_ROTATION;
 	}
 	
