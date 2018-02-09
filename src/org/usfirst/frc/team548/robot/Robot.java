@@ -56,9 +56,11 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
+    	String gameData = DriverStation.getInstance().getGameSpecificMessage();
     	int mRobotPosition = (int) SmartDashboard.getNumber("Robot Position",1);
     	autoSelected = (String) autoChooser.getSelected();
     	SmartDashboard.putString("Auto Selected: ", autoSelected);
+    	SmartDashboard.putString("GameData", gameData);
     	
     	mAutoProgram = null;
     	
