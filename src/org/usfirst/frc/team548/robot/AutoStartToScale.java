@@ -14,21 +14,25 @@ public class AutoStartToScale extends AutoBaseClass{
 			
 			switch(getCurrentStep()) {
 			case 0:
-				setTimerAndAdvanceStep(4000);
+				setTimerAndAdvanceStep(3000);
 				if(robotPosition() == 1) {
-					this.driveInches(36, 10, .1);
+					this.driveInches(36, 30, .3);
 				} else {
-					this.driveInches(36, -10, .1);
+					this.driveInches(36, -30, .3);
 				}
+				break;
 			case 1:
 				if(driveCompleted())
 					advanceStep();
+				break;
 			case 2:
 				setTimerAndAdvanceStep(3000);
-				this.driveInches(48, 0, .1);
+				this.driveInches(48, 0, .3);
+				break;
 			case 3:
 				if(driveCompleted())
 					advanceStep();
+				break;
 			case 4:
 				stop();
 				break;

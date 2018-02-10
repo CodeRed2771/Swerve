@@ -23,7 +23,9 @@ public class DriveAuto {
     private static double maxPowerAllowed = 1;
     private static double curPowerSetting = 1;
     private static boolean isDriveInchesRunning = false;
-    private static int heading = 0;
+    private static double heading = 0;
+    
+    private static double strafeAngle = 0;
     
     public static DriveAuto getInstance() {
 		if (instance == null)
@@ -60,6 +62,7 @@ public class DriveAuto {
         maxPowerAllowed = maxPower;
         curPowerSetting = startPowerLevel;  // the minimum power required to start moving.  (Untested)
         isDriveInchesRunning = true;
+        strafeAngle = angle;
 
         SmartDashboard.putNumber("DRIVE INCHES", inches);
         
@@ -130,13 +133,15 @@ public class DriveAuto {
     public static void tick() {
     	// this is called roughly 50 times per second
     	
-    	if (isDriveInchesRunning){
-    		if (DriveTrain.getDriveError() > 0)
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5),
-    					DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5));
-    		else
-    			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5),
-    					DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5));
+    	if(strafeAngle == 0) { // currently this routine only works when driving straight forward.
+        	if (isDriveInchesRunning){
+        		if (DriveTrain.getDriveError() > 0)  // directional difference
+        			DriveTrain.setTurnOrientation(DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5),
+        					DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5));
+        		else
+        			DriveTrain.setTurnOrientation(strafeAngle + DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5),
+        					DriveTrain.angleToLoc((RobotGyro.pidGet()-heading)*.5), DriveTrain.angleToLoc(-(RobotGyro.pidGet()-heading)*.5));
+        	}
     	}
     	
     	// check for ramping up
