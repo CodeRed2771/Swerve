@@ -4,8 +4,6 @@ package org.usfirst.frc.team548.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,6 +21,7 @@ public class Robot extends IterativeRobot {
 	final String autoCubeFollow = "Auto Cube Follow";
 	final String autoBaseLine = "Auto Base Line";
 	final String visionAuto = "Vision Auto";
+	final String autoScale = "Auto Scale";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
@@ -44,6 +43,7 @@ public class Robot extends IterativeRobot {
       	autoChooser.addObject(autoRotateTest, autoRotateTest);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
       	autoChooser.addObject(autoSwitch, autoSwitch);
+      	autoChooser.addObject(autoScale, autoScale);
       	autoChooser.addObject(visionAuto, visionAuto);
       	
       	SmartDashboard.putNumber("Auto P:", Calibration.AUTO_DRIVE_P);
@@ -81,6 +81,9 @@ public class Robot extends IterativeRobot {
     	    case autoSwitch:
     	    	mAutoProgram = new AutoMainSwitch(mRobotPosition);
         		break;
+    	    case autoScale:
+    	    	mAutoProgram = new AutoStartToScale(mRobotPosition);
+    	    	break;
     	    case autoCubeFollow:
     	    	mAutoProgram = new AutoCubeFollow(mRobotPosition);
     	    	break;
