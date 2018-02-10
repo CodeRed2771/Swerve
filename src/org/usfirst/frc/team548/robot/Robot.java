@@ -15,7 +15,7 @@ public class Robot extends IterativeRobot {
 	
 	//---AUTO IMPORTS---
 	SendableChooser<String> autoChooser;
-	final String autoCalibrateDrive = "Auto Calibrate Drive";
+	final String autoDriveDoubleDiamond = "Auto Drive Double Diamond";
 	final String autoRotateTest = "Auto Rotate Test";
 	final String calibrateSwerveModules = "Calibrate Swerve Modules";
 	final String deleteSwerveCalibration = "Delete Swerve Calibration";
@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
       	autoChooser.addDefault(autoBaseLine, autoBaseLine);
       	autoChooser.addObject(calibrateSwerveModules, calibrateSwerveModules);
       	autoChooser.addObject(deleteSwerveCalibration, deleteSwerveCalibration);
-      	autoChooser.addObject(autoCalibrateDrive, autoCalibrateDrive);
+      	autoChooser.addObject(autoDriveDoubleDiamond, autoDriveDoubleDiamond);
       	autoChooser.addObject(autoRotateTest, autoRotateTest);
       	//autoChooser.addObject(autoCubeFollow, autoCubeFollow);
       	autoChooser.addObject(autoSwitch, autoSwitch);
@@ -65,14 +65,14 @@ public class Robot extends IterativeRobot {
     	mAutoProgram = null;
     	
     	switch(autoSelected){
-    	    case autoCalibrateDrive:
+    	    case autoDriveDoubleDiamond:
         		mAutoProgram = new AutoCalibrateDrive(mRobotPosition);
         		break;
     	    case autoRotateTest:
     	    	mAutoProgram = new AutoRotateTest(mRobotPosition);
     	    	break;
     	    case calibrateSwerveModules:
-    	    	double[] pos = DriveTrain.getAllTurnOrientations();
+    	    	double[] pos = DriveTrain.getAllAbsoluteTurnOrientations();
     	    	Calibration.saveSwerveCalibration(pos[0], pos[1], pos[2], pos[3]);
     	    	break;
     	    case deleteSwerveCalibration:

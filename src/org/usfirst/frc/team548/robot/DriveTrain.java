@@ -336,9 +336,9 @@ public class DriveTrain implements PIDOutput {
 		pidControllerRot.disable();
 	}
 	
-	public static double[] getAllTurnOrientations() {
-		return new double[] {moduleA.getTurnOrientation(), moduleB.getTurnOrientation(),
-				moduleC.getTurnOrientation(), moduleD.getTurnOrientation()};
+	public static double[] getAllAbsoluteTurnOrientations() {
+		return new double[] {moduleA.getTurnAbsolutePosition(), moduleB.getTurnAbsolutePosition(),
+				moduleC.getTurnAbsolutePosition(), moduleD.getTurnAbsolutePosition()};
 	}
 	
 	public static void setDriveModulesPIDValues(double p, double i, double d){
