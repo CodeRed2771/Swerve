@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
 	final String autoBaseLine = "Auto Base Line";
 	final String visionAuto = "Vision Auto";
 	final String autoScale = "Auto Scale";
+	final String autoSwitchToScale = "Auto Switch to Scale";
 	String autoSelected;
 	AutoBaseClass mAutoProgram;
 	
@@ -45,6 +46,7 @@ public class Robot extends IterativeRobot {
       	autoChooser.addObject(autoSwitch, autoSwitch);
       	autoChooser.addObject(autoScale, autoScale);
       	autoChooser.addObject(visionAuto, visionAuto);
+      	autoChooser.addObject(autoSwitchToScale, autoSwitchToScale);
       	
       	SmartDashboard.putNumber("Auto P:", Calibration.AUTO_DRIVE_P);
     	SmartDashboard.putNumber("Auto I:", Calibration.AUTO_DRIVE_I);
@@ -92,6 +94,8 @@ public class Robot extends IterativeRobot {
     	    	break;
     	    case visionAuto:
     	    	mAutoProgram = new VisionAuto(mRobotPosition);
+    	    case autoSwitchToScale:
+    	    	mAutoProgram = new AutoSwitchToScale(mRobotPosition);
     	} 
 
     	DriveAuto.reset();
