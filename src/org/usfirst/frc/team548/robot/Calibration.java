@@ -20,6 +20,7 @@ public final static int XBOX_PORT = 0;
 	public final static int DT_A_DRIVE_TALON_ID = 1;
 	public final static int DT_A_TURN_TALON_ID = 2;
 	private final static double DT_A_ABS_ZERO_INITIAL = .66179894;
+//	private final static double DT_A_ABS_ZERO_INITIAL = .103080539;
 	private static double DT_A_ABS_ZERO = DT_A_ABS_ZERO_INITIAL;
 	public static double GET_DT_A_ABS_ZERO() { return DT_A_ABS_ZERO; }
 	
@@ -34,6 +35,7 @@ public final static int XBOX_PORT = 0;
 	public final static int DT_C_DRIVE_TALON_ID = 3;
 	public final static int DT_C_TURN_TALON_ID = 4;
 	private final static double DT_C_ABS_ZERO_INITIAL = .04479865;
+//	private final static double DT_C_ABS_ZERO_INITIAL = -0.01509341;
 	private static double DT_C_ABS_ZERO = DT_C_ABS_ZERO_INITIAL;
 	public static double GET_DT_C_ABS_ZERO() { return DT_C_ABS_ZERO; }
 	

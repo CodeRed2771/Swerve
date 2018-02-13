@@ -140,7 +140,7 @@ public class DriveTrain implements PIDOutput {
 		moduleC.stopDrive();
 		moduleD.stopDrive();
 	}
-
+	
 	public static double angleToLoc(double angle) {
 		if (angle < 0) {
 			return .5d + ((180d - Math.abs(angle)) / 360d);
@@ -298,12 +298,13 @@ public class DriveTrain implements PIDOutput {
 		}
 		pidControllerRot.setSetpoint(angle);
 	}
-
+	
 	public static void fieldCentricDrive(double fwd, double strafe, double rot) {
 		double temp = (fwd * Math.cos(RobotGyro.getGyroAngleInRad()))
 				+ (strafe * Math.sin(RobotGyro.getGyroAngleInRad()));
+		
 		strafe = (-fwd * Math.sin(RobotGyro.getGyroAngleInRad()))
-				+ (strafe * Math.cos(RobotGyro.getGyroAngleInRad()));
+				+ (-strafe * Math.cos(RobotGyro.getGyroAngleInRad()));
 		fwd = temp;
 		humanDrive(fwd, strafe, rot);
 	}
